@@ -4,8 +4,8 @@ import heroSrc from '../../assets/videos/horizontal_.webm';
 import TopNavbar from './TopNavbar';
 import NavBar from './NavBar';
 import { Button } from '@nextui-org/react';
-import { FaArrowRight } from 'react-icons/fa';
-import { FaChevronRight } from 'react-icons/fa6';
+import { BiSolidRightArrow } from "react-icons/bi";
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -34,10 +34,13 @@ const Hero = () => {
             <h1 className="text-8xl font-extrabold">Barberbro <br/>for Everyone</h1>
             <p className="mt-4 mb-12 text-lg">Effortless Scheduling for Barbers, Seamless Booking for Clients</p>
 
-            <Button className='px-10 py-4 text-black bg-gold' size='lg' radius='sm' variant='flat'>Get Started <FaChevronRight className='ml-2' /> </Button>
-        </div>
+            <div className='flex gap-6 justify-center'>
+              <Button className='px-10 py-4 text-black bg-gold font-bold' size='lg' radius='sm' variant='flat'>Book Now! </Button>
+              <Button as={Link} to='/register-barber' className='px-10 py-5 border-gold gold font-bold' size='lg' radius='sm' variant='bordered'>Join Us <BiSolidRightArrow className='ml-2' /> </Button>
+            </div>
 
-        {/* Anda bisa menambahkan komponen lain di sini */}
+            
+        </div>
       </div>
     </div>
   );

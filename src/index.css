@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: local('Inter'), url('./assets/fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+  src: local('Inter'), url('./assets/fonts/Inter.ttf') format('truetype');
 }
 
 *{
@@ -38,6 +38,10 @@ video {
 
 .bg-gold{
   background-color: #ddc686;
+}
+
+.border-gold {
+  border-color: #ddc686;
 }
 
 

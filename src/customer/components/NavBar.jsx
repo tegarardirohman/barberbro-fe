@@ -9,6 +9,14 @@ import { Button } from '@nextui-org/react';
 
 const NavBar = () => {
   const [scrolling, setScrolling] = useState(false);
+  const [isOpenLogin, setIsOpenLogin] = useState(false);
+  const [isOpenRegister, setIsOpenRegister] = useState(false);
+
+  const openLoginModal = () => setIsLoginOpen(true);
+  const closeLoginModal = () => setIsLoginOpen(false);
+  
+  const openRegisterModal = () => setIsRegisterOpen(true);
+  const closeRegisterModal = () => setIsRegisterOpen(false)
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);

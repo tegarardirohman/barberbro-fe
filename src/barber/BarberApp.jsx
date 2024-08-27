@@ -1,9 +1,9 @@
 import React from 'react'
 
-const BarberDashboard = () => {
+const BarberApp = () => {
   return (
     <div>BarberDashboard</div>
   )
 }
 
-export default BarberDashboard
+export default BarberApp

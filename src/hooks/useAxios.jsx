@@ -2,6 +2,10 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const useAxios = () => {
+  axios.defaults.baseURL = 'http://10.10.102.48:8080/api/';
+
+  axios.defaults.headers.common['Content-Type'] = 'application/json';
+
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -10,8 +14,6 @@ const useAxios = () => {
     setLoading(true);
     setError(null);
 
-    console.log("test")
-
     try {
       const result = await axios({
         url,
@@ -19,6 +21,8 @@ const useAxios = () => {
         data: body,
         headers,
       });
+
+      console.log(result)
 
       setResponse(result.data);
     } catch (err) {
