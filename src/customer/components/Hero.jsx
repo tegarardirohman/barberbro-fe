@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
 import heroSrc from '../../assets/videos/horizontal_.webm';
-import TopNavbar from './TopNavbar';
 import NavBar from './NavBar';
 import { Button } from '@nextui-org/react';
 import { BiSolidRightArrow } from "react-icons/bi";
@@ -10,8 +9,6 @@ import { Link } from 'react-router-dom';
 const Hero = () => {
   return (
     <div className='relative w-full h-screen'>
-      {/* Navbar di atas video */}
-      {/* <TopNavbar /> */}
       <NavBar />
 
       <ReactPlayer 
@@ -35,8 +32,8 @@ const Hero = () => {
             <p className="mt-4 mb-12 text-lg">Effortless Scheduling for Barbers, Seamless Booking for Clients</p>
 
             <div className='flex gap-6 justify-center'>
-              <Button className='px-10 py-4 text-black bg-gold font-bold' size='lg' radius='sm' variant='flat'>Book Now! </Button>
-              <Button as={Link} to='/register-barber' className='px-10 py-5 border-gold gold font-bold' size='lg' radius='sm' variant='bordered'>Join Us <BiSolidRightArrow className='ml-2' /> </Button>
+              <Button className='px-10 py-4 text-black bg-gold font-bold' size='lg' radius='sm' variant='flat'>Book Now </Button>
+              <Button as={Link} to='/register-barber' className='px-10 py-5 border-gold gold font-bold' size='lg' radius='sm' variant='bordered'>Join Us  </Button>
             </div>
 
             
