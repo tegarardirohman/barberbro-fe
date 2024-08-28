@@ -13,7 +13,7 @@ function App() {
       <AuthProvider>
       <Routes>
         <Route path="/*" element={ <CustomerApp /> } /> 
-        <Route path="/admin/*" element={<PrivateRoute role="admin"><AdminApp /></PrivateRoute>} />
+        <Route path="/admin/*" element={<AdminApp />} />
         <Route path="/staff/*" element={<PrivateRoute role="staff"><BarberApp /></PrivateRoute>} />
       </Routes>
       </AuthProvider>
