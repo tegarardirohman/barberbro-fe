@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -44,12 +44,21 @@ export default function ModalLogin({ props }) {
   const handleLogin = async (data) => {
     try {
       await login(data.email, data.password, data.remember);
-      onClose();
-    } catch (error) {
-      console.error("Login failed:", error);
-      // Display error message to user
+
+      if(!error) {
+        onClose();
+      } else {
+        form.setError("email", { type: "manual", message: error.response?.data?.message || "Login failed" });
+      }
+
+    } catch (e) {
+      console.error("Login failed:", e);
     }
   };
+
+  // useEffect(() => {
+  //   form.setError("email", { type: "manual", message: error.response?.data?.message || "Login failed" });
+  // }, [error]);
 
   return (
     <>

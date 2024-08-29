@@ -1,10 +1,7 @@
-import { Button, Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from '@nextui-org/react';
 import React from 'react';
 import barberBanner from '../../assets/images/barber-banner.jpg';
-import { Link } from 'react-router-dom';
-import Tabregister from '../components/TabRegister';
-import MapInput from '../components/formRegister/MapInput';
-import { FaArrowLeft } from 'react-icons/fa6';
+import Tabregister from '../components/formRegister/TabRegister';
 
 
 const RegisterBarber = () => {
@@ -20,7 +17,6 @@ const RegisterBarber = () => {
 
         <CardBody className='p-0'>
             <Tabregister />
-            {/* <MultiStepForm /> */}
         </CardBody>
 
       </Card>

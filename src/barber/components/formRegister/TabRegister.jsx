@@ -15,14 +15,14 @@ import {
 } from "@nextui-org/react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import validationSchema from "./formRegister/validationSchema";
+import validationSchema from "./validationSchema";
 import { useRef } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import MapInput from "./formRegister/MapInput";
-import OperationalHoursInput from "./formRegister/OperationalHoursInput";
-import useAxios from "../../hooks/useAxios";
-import FormResults from "./formRegister/FormResults";
+import MapInput from "./MapInput";
+import OperationalHoursInput from "./OperationalHoursInput";
+import useAxios from "../../../hooks/useAxios";
+import FormResults from "./FormResults";
 
 export default function MultiStepForm() {
   const [operationalHours, setOperationalHours] = useState([]);
