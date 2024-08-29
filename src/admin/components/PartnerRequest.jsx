@@ -1,7 +1,9 @@
+import Pagination from "./Pagination.jsx";
+
 const people = [
     {
         name: 'The Gentlemen Hair',
-        email: 'leslie.alexander@example.com',
+        email: 'thegentlemenhair@example.com',
         role: 'Co-Founder / CEO',
         imageUrl:
             'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -10,7 +12,7 @@ const people = [
     },
     {
         name: 'Rich Joe Barbershop',
-        email: 'michael.foster@example.com',
+        email: 'richjoebarbershop@example.com',
         role: 'Co-Founder / CTO',
         imageUrl:
             'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -19,7 +21,7 @@ const people = [
     },
     {
         name: 'Eleven Four Barbershop',
-        email: 'dries.vincent@example.com',
+        email: 'elevenfour@example.com',
         role: 'Business Relations',
         imageUrl:
             'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -27,7 +29,7 @@ const people = [
     },
     {
         name: 'Pullman Barbershop',
-        email: 'lindsay.walton@example.com',
+        email: 'pullmancollab@example.com',
         role: 'Front-end Developer',
         imageUrl:
             'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -36,7 +38,7 @@ const people = [
     },
     {
         name: 'Mr. British Men Salon',
-        email: 'courtney.henry@example.com',
+        email: 'britishmen@example.com',
         role: 'Designer',
         imageUrl:
             'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -45,7 +47,7 @@ const people = [
     },
     {
         name: 'Captain Hook Care',
-        email: 'tom.cook@example.com',
+        email: 'captain.hook@example.com',
         role: 'Director of Product',
         imageUrl:
             'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -56,15 +58,27 @@ const people = [
 export default function PartnerRequest() {
     return (
         <div className="border-2 p-4 rounded-lg">
-            <div>
-                <div>
-                    <h2 className="font-bold text-2xl py-4">Partner Requests</h2>
+            <div className="flex flex-row items-center justify-between mb-4">
+                <div className="flex flex-col">
+                    <h2 className="font-bold text-2xl py-4">Partner Listing Requests</h2>
                     <div className="flex flex-row gap-x-2">
                         <h2 className="font-bold">29 total,</h2>
-                        <h2 className="text-zinc-600">proceed to resolve them</h2>
+                        <h3 className="text-zinc-600">proceed to resolve them</h3>
+                    </div>
+                </div>
+                <div className="flex flex-row items-center gap-x-6">
+                    <div className="text-center">
+                        <h2 className="font-bold text-2xl">25</h2>
+                        <p className="text-sm text-zinc-700">Done</p>
+                    </div>
+                    <div className="bg-zinc-300 h-10 w-[2px] rounded"></div>
+                    <div className="text-center">
+                        <h2 className="font-bold text-2xl">57</h2>
+                        <p className="text-sm text-zinc-700">Waiting List</p>
                     </div>
                 </div>
             </div>
+            <hr/>
             <ul role="list" className="divide-y divide-gray-100">
                 {people.map((person) => (
                     <li key={person.email} className="flex justify-between gap-x-6 py-5">
@@ -93,6 +107,7 @@ export default function PartnerRequest() {
                     </li>
                 ))}
             </ul>
+            <Pagination/>
         </div>
     )
 }

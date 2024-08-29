@@ -1,9 +1,10 @@
 import React from 'react'
+import BarbershopProfilePage from "./pages/BarbershopProfilePage.jsx";
 
 const BarberApp = () => {
-  return (
-    <div>BarberDashboard</div>
-  )
+    return (
+        <BarbershopProfilePage/>
+    )
 }
 
 export default BarberApp
