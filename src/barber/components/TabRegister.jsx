@@ -1,289 +1,622 @@
-import React from "react";
-import { Tabs, Tab, Card, CardBody, Button, Input, Textarea, Select, Checkbox, Divider, SelectItem } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Input,
+  Textarea,
+  Select,
+  Checkbox,
+  Card,
+  CardBody,
+  SelectItem,
+  CardFooter,
+  Spacer,
+  CardHeader,
+  CheckboxGroup,
+} from "@nextui-org/react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import validationSchema  from "./validationSchema"; 
-import { Link } from "react-router-dom";
+import validationSchema from "./formRegister/validationSchema";
+import { useRef } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import MapInput from "./formRegister/MapInput";
+import OperationalHoursInput from "./formRegister/OperationalHoursInput";
+import useAxios from "../../hooks/useAxios";
+import FormResults from "./formRegister/FormResults";
 
-export default function TabRegister() {
-  const { control, handleSubmit, register, formState: { errors } } = useForm({
+export default function MultiStepForm() {
+  const [operationalHours, setOperationalHours] = useState([]);
+  const [socialMedia, setSocialMedia] = useState([
+    {
+      platform_name: "Facebook",
+      platform_url: "",
+    },
+    {
+      platform_name: "Instagram",
+      platform_url: "",
+    },
+    {
+      platform_name: "TikTok",
+      platform_url: "",
+    },
+  ]);
+
+  // location
+  const [address, setAddress] = useState(null);
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [stateProvinceRegion, setStateProvinceRegion] = useState("");
+  const [postalZipCode, setPostalZipCode] = useState("");
+  const [country, setCountry] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+
+  //agreement
+  const [agreement, setAgreement] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+    watch,
+    getValues,
+    trigger,
+    setValue,
+  } = useForm({
     resolver: zodResolver(validationSchema),
+    defaultValues: {
+      barbershop: {
+        name: "",
+        contact_number: "",
+        email: "",
+        password: "",
+        street_address: "",
+        city: "",
+        state_province_region: "",
+        postal_zip_code: "",
+        country: "",
+        latitude: "",
+        longitude: "",
+        description: "",
+      },
+      operational_hours: [
+        // { day: "", opening_time: "", closing_time: "" },
+      ],
+      services: [
+        // { service_name: "", price: "" },
+      ],
+      social_media: [
+        // { platform_name: "", platform_url: "" },
+      ],
+    },
+    mode: "onBlur",
   });
 
-  const { fields: operatingHoursFields, append: appendOperatingHour, remove: removeOperatingHour } = useFieldArray({
+  // use AXIOS
+  const { response, error, loading, request } = useAxios();
+  const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
+
+    console.log(data)
+
+    try {
+      await request("/barber/register", "POST", data);
+
+      if (response) {
+        console.log(response);
+        alert("Registration successful");
+
+        navigate('/')
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
+  const {
+    fields: operatingHoursFields,
+    append: appendOperatingHour,
+    remove: removeOperatingHour,
+  } = useFieldArray({
     control,
-    name: "operatingHours",
+    name: "operational_hours",
   });
 
-  const { fields: listOfServicesFields, append: appendService, remove: removeService } = useFieldArray({
-    control,
-    name: "listOfServices",
-  });
+  useEffect(() => {
+    setValue("operational_hours", operationalHours);
+  }, [operationalHours]);
 
-  const onSubmit = data => {
-    console.log(data);
+  const [step, setStep] = useState(1);
+
+  const handleNext = async () => {
+    const result = await trigger();
+
+    if (result) {
+      setStep((prevStep) => prevStep + 1);
+    } else {
+      console.log("validation failed", errors);
+    }
+  };
+
+  const handlePrev = () => {
+    setStep((prevStep) => prevStep - 1);
+  };
+
+  // service
+  const [services, setServices] = useState([{ service_name: "", price: "" }]);
+
+  // Function to handle adding a new service input
+  const handleAddService = () => {
+    setServices([...services, { service_name: "", price: "" }]);
+  };
+
+  // Function to handle input changes for services
+  const handleServiceChange = (index, event) => {
+    const { name, value } = event.target;
+    const updatedServices = services.map((service, i) =>
+      i === index ? { ...service, [name]: value } : service
+    );
+    setServices(updatedServices);
+    setValue("services", updatedServices);
+  };
+
+  // Function to handle removing a service input
+  const handleRemoveService = (index) => {
+    const updatedServices = services.filter((_, i) => i !== index);
+    setServices(updatedServices);
+  };
+  // end of services
+
+
+  const fetchZipCode = async (lat, long) => {
+    try {
+      await request(
+        `https://kodepos.vercel.app/detect/?latitude=${lat}&longitude=${long}`
+      );
+
+      setPostalZipCode(response?.data?.code);
+      setValue("barbershop.postal_zip_code", response?.data?.code?.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (address) {
+      console.log(address);
+      const addressToSet =
+        (address?.address?.road ? address?.address?.road + " " : "") +
+          (address?.address?.neighbourhood
+            ? address?.address?.neighbourhood
+            : "") || "";
+
+      setValue("barbershop.street_address", addressToSet);
+      setValue("barbershop.city", address.address?.city);
+      setValue("barbershop.state_province_region", address.address?.state);
+      setValue("barbershop.country", address?.address.country);
+      setValue("barbershop.latitude", address.lat);
+      setValue("barbershop.longitude", address?.lon);
+      setValue("barbershop.city", address.address?.city);
+      setValue("barbershop.state_province_region", address.address?.state);
+      setValue("barbershop.country", address?.address.country);
+      setValue("services", services);
+      setValue("social_media", socialMedia);
+
+      fetchZipCode(address?.lat, address?.lon);
+
+      setStreetAddress(addressToSet);
+      setCity(address.address?.city);
+      setStateProvinceRegion(address.address?.state);
+      setCountry(address?.address.country);
+      setLatitude(address?.latitude);
+      setLongitude(address?.longitude);
+    }
+  }, [address]);
+
+  //
+  const handleSocialMediaChange = (socmed, e) => {
+    if (socmed === "facebook") {
+      socialMedia[0].platform_url = e.target.value;
+    } else if (socmed === "instagram") {
+      socialMedia[1].platform_url = e.target.value;
+    } else if (socmed === "tiktok") {
+      socialMedia[2].platform_url = e.target.value;
+    }
+
+    setValue("social_media", socialMedia);
   };
 
   return (
-    <div className="flex flex-col relative">
-      {/* <Button as={Link} to={'/'} size="md" className="absolute top-3 left-3 z-10">Cancel</Button> */}
+    <form className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+      {step === 1 && (
+        <Card className="w-full h-full" shadow="none">
+          <CardHeader className="w-full justify-between border-b-slate-200 border-2 px-10 py-4">
+            <Button as={Link} to={"/"}>
+              <FaArrowLeft /> Back
+            </Button>
+            <h2 className="text-xl font-bold">Register </h2>
+          </CardHeader>
 
-      <form className="w-full p-4" onSubmit={handleSubmit(onSubmit)}>
-        <Tabs aria-label="Options" placement="right" initialValue="account" className="w-full flex justify-end">
+          <CardBody className="w-full flex justify-start items-start px-10 py-8">
+            <div className="flex w-full justify-between gap-8">
+              <div className="w-full flex flex-col gap-4">
+                <h2 className="pb-1 font-semibold">Business Information</h2>
+                <div className="flex flex-row gap-4">
+                  {/* name */}
+                  <Input
+                    {...register("barbershop.name")}
+                    label="Barbershop Name"
+                    placeholder="Enter business name"
+                    labelPlacement="outside"
+                    isInvalid={!!errors.barbershop?.name}
+                    errorMessage={errors.barbershop?.name?.message}
+                    fullWidth
+                    bordered
+                    size="md"
+                  />
 
-          <Tab key="account" title="Account">
-            <Card className="w-full" shadow="none">
-              <CardBody className="p-0 flex gap-4">
-                <h2 className="text-xl font-bold">Account Information</h2>
-                
-                <Input
-                  {...register("barbershopName")}
-                  placeholder="Enter barbershop name"
-                  isInvalid={!!errors.barbershopName}
-                  label="Barbershop Name"
-                />
-                {errors.barbershopName && <p>{errors.barbershopName.message}</p>}
-                
-                <Input
-                  {...register("contactNumber")}
-                  type="tel"
-                  placeholder="Enter contact number"
-                  isInvalid={!!errors.contactNumber}
-                  label="Contact Number"
-                />
-                {errors.contactNumber && <p>{errors.contactNumber.message}</p>}
-                
-                <Input
-                  {...register("emailAddress")}
-                  type="email"
-                  placeholder="Enter business email address"
-                  isInvalid={!!errors.emailAddress}
-                  label="Email Address"
-                />
-                {errors.emailAddress && <p>{errors.emailAddress.message}</p>}
+                  {/* name */}
+                  <Input
+                    {...register("barbershop.contact_number")}
+                    label="Contacts"
+                    placeholder="Enter business contacts"
+                    labelPlacement="outside"
+                    isInvalid={!!errors.barbershop?.contact_number}
+                    errorMessage={errors.barbershop?.contact_number?.message}
+                    fullWidth
+                    bordered
+                    size="md"
+                  />
+                </div>
 
-                <label className="block mb-2">Barbershop Logo:</label>
-                <Input type="file" {...register('barbershopLogo')} />
-                {errors.barbershopLogo && <p>{errors.barbershopLogo.message}</p>}
-                
-                <label className="block mb-2">Gallery Images:</label>
-                <Input type="file" {...register('galleryImages')} multiple />
-                {errors.galleryImages && <p>{errors.galleryImages.message}</p>}
-                
-                
-              </CardBody>
-            </Card>
-          </Tab>
-
-          <Tab key="detil" title="Detil">
-            <Card className="w-full" shadow="none">
-              <CardBody className="p-0 flex gap-4">
-              <Input
-                  {...register("streetAddress")}
-                  placeholder="Enter street address"
-                  isInvalid={!!errors.streetAddress}
-                />
-                {errors.streetAddress && <p>{errors.streetAddress.message}</p>}
-                
+                {/* email */}
                 <Input
-                  {...register("city")}
-                  placeholder="Enter city name"
-                  isInvalid={!!errors.city}
+                  {...register("barbershop.email")}
+                  label="Email"
+                  placeholder="Enter business email"
+                  labelPlacement="outside"
+                  isInvalid={!!errors.barbershop?.email}
+                  errorMessage={errors.barbershop?.email?.message}
+                  fullWidth
+                  bordered
+                  size="md"
                 />
-                {errors.city && <p>{errors.city.message}</p>}
-                
-                <Input
-                  {...register("stateProvinceRegion")}
-                  placeholder="Enter state, province, or region"
-                  isInvalid={!!errors.stateProvinceRegion}
-                />
-                {errors.stateProvinceRegion && <p>{errors.stateProvinceRegion.message}</p>}
-                
-                <Input
-                  {...register("postalCode")}
-                  placeholder="Enter postal or ZIP code"
-                  isInvalid={!!errors.postalCode}
-                />
-                {errors.postalCode && <p>{errors.postalCode.message}</p>}
-                
-                <Select
-                  {...register("country")}
-                  placeholder="Select country"
-                  isInvalid={!!errors.country}
-                >
-                  <SelectItem value="US">United States</SelectItem>
-                  <SelectItem value="CA">Canada</SelectItem>
 
+                <div className="flex flex-row gap-4">
+                  {/* name */}
+                  <Input
+                    {...register("barbershop.password")}
+                    label="Password"
+                    type="password"
+                    placeholder="********"
+                    labelPlacement="outside"
+                    isInvalid={!!errors.barbershop?.password}
+                    errorMessage={errors.barbershop?.password?.message}
+                    fullWidth
+                    bordered
+                    size="md"
+                  />
 
+                  {/* name */}
+                  <Input
+                    {...register("barbershop.confirm_password")}
+                    label="Retype Password"
+                    type="password"
+                    placeholder="********"
+                    labelPlacement="outside"
+                    isInvalid={!!errors.barbershop?.confirm_password}
+                    errorMessage={errors.barbershop?.confirm_password?.message}
+                    fullWidth
+                    bordered
+                    size="md"
+                  />
+                </div>
 
-                </Select>
-                {errors.country && <p>{errors.country.message}</p>}
-                
-                <Input
-                  {...register("mapLocation")}
-                  placeholder="Pin your barbershop location on the map"
-                  isInvalid={!!errors.mapLocation}
+                {/* description */}
+
+                <Textarea
+                  {...register("barbershop.description")}
+                  label="Description"
+                  placeholder="Enter business description"
+                  labelPlacement="outside"
+                  isInvalid={!!errors.barbershop?.description}
+                  errorMessage={errors.barbershop?.description?.message}
+                  bordered
+                  size="md"
                 />
-                {errors.mapLocation && <p>{errors.mapLocation.message}</p>}
-                
-                {/* Operating Hours */}
-                {operatingHoursFields.map((item, index) => (
-                  <div key={item.id} className="mb-4">
+
+                <h2 className="pt-4 font-semibold">Operational Hours</h2>
+
+                {/* Operational Hours Error */}
+                {errors.operational_hours && (
+                  <p className="text-red-500">{errors.operational_hours?.message}</p>
+                )}
+
+                <OperationalHoursInput
+                  operationalHours={operationalHours}
+                  setOperationalHours={setOperationalHours}
+                />
+
+                <div>
+                  <h2 className="pt-4 font-semibold">Barbershop Services</h2>
+
+                  { errors.services && (
+                    <p className="text-red-500 pb-4">{errors.services?.message}</p>
+                  )}
+
+                  {services.map((service, index) => (
+                    <div
+                      key={index}
+                      className="flex w-full gap-4 mb-4 justify-between"
+                    >
+                      <Input
+                        type="text"
+                        id={`services-${index}`}
+                        name="service_name"
+                        label="Services"
+                        labelPlacement="outside"
+                        placeholder="Enter Services"
+                        className="flex-1"
+                        value={service.service}
+                        onChange={(e) => handleServiceChange(index, e)}
+                      />
+                      <Input
+                        type="number"
+                        id={`price-${index}`}
+                        name="price"
+                        label="Price"
+                        labelPlacement="outside"
+                        placeholder="Enter Price"
+                        className="w-1/3"
+                        value={service.price}
+                        onChange={(e) => handleServiceChange(index, e)}
+                      />
+                      <Button
+                        type="button"
+                        color="danger"
+                        auto
+                        onClick={() => handleRemoveService(index)}
+                        className="self-center mt-6"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    onPress={handleAddService}
+                    className="mt-2 bg-blue-500 text-white rounded-md"
+                  >
+                    Add Service
+                  </Button>
+                </div>
+              </div>
+
+              <div className="w-full flex flex-col gap-4">
+                <h2 className="pb-4 font-semibold">Barbershop Location</h2>
+                <MapInput address={address} setAddress={setAddress} />
+
+                <Controller
+                  name="barbershop.street_address"
+                  control={control}
+                  defaultValue={streetAddress}
+                  render={({ field }) => (
                     <Input
-                      {...register(`operatingHours.${index}.day`)}
-                      placeholder="Day of the week"
-                      isInvalid={!!errors.operatingHours?.[index]?.day}
+                      {...field}
+                      label="Street Address"
+                      placeholder="Enter Street Address"
+                      labelPlacement="outside"
+                      fullWidth
+                      bordered
+                      size="md"
+                      onChange={(e) => field.onChange(e.target.value)}
+                      value={field.value || ""}
                     />
-                    {errors.operatingHours?.[index]?.day && <p>{errors.operatingHours[index]?.day?.message}</p>}
-                    
-                    <Input
-                      {...register(`operatingHours.${index}.openingTime`)}
-                      placeholder="Opening Time"
-                      isInvalid={!!errors.operatingHours?.[index]?.openingTime}
-                    />
-                    {errors.operatingHours?.[index]?.openingTime && <p>{errors.operatingHours[index]?.openingTime?.message}</p>}
-                    
-                    <Input
-                      {...register(`operatingHours.${index}.closingTime`)}
-                      placeholder="Closing Time"
-                      isInvalid={!!errors.operatingHours?.[index]?.closingTime}
-                    />
-                    {errors.operatingHours?.[index]?.closingTime && <p>{errors.operatingHours[index]?.closingTime?.message}</p>}
-                    
-                    <Button type="button" onClick={() => removeOperatingHour(index)}>Remove</Button>
-                  </div>
-                ))}
-                <Button type="button" onClick={() => appendOperatingHour({ day: "", openingTime: "", closingTime: "" })}>
-                  Add Operating Hour
+                  )}
+                />
+
+                <div className="flex w-full gap-4">
+                  <Controller
+                    name="barbershop.city"
+                    control={control}
+                    defaultValue={city}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        label="City"
+                        placeholder="Enter City"
+                        labelPlacement="outside"
+                        fullWidth
+                        bordered
+                        size="md"
+                        value={field.value} // Controlled value from field
+                        onChange={(e) => {
+                          field.onChange(e); // Update react-hook-form state
+                          setCity(e.target.value);
+                        }}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    name="barbershop.state_province_region"
+                    control={control}
+                    defaultValue={city}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        label="State"
+                        placeholder="Enter State"
+                        labelPlacement="outside"
+                        fullWidth
+                        bordered
+                        size="md"
+                        value={field.value} // Controlled value from field
+                        onChange={(e) => {
+                          field.onChange(e); // Update react-hook-form state
+                          setStateProvinceRegion(e.target.value);
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+
+                <div className="flex w-full gap-4">
+                  <Controller
+                    name="barbershop.country"
+                    control={control}
+                    defaultValue={city}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        label="Country"
+                        placeholder="Enter Country"
+                        labelPlacement="outside"
+                        fullWidth
+                        bordered
+                        size="md"
+                        value={field.value} // Controlled value from field
+                        onChange={(e) => {
+                          field.onChange(e); // Update react-hook-form state
+                          setCountry(e.target.value);
+                        }}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    name="barbershop.postal_zip_code"
+                    control={control}
+                    defaultValue={city}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        label="ZIP Code"
+                        placeholder="Enter Zip Code"
+                        labelPlacement="outside"
+                        fullWidth
+                        bordered
+                        size="md"
+                        value={field.value} // Controlled value from field
+                        onChange={(e) => {
+                          field.onChange(e); // Update react-hook-form state
+                          setPostalZipCode(e.target.value);
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+
+                {/* socmed */}
+                <h2 className="pt-4 font-semibold">Social Media</h2>
+
+                <div className="flex flex-col w-full gap-4">
+                  <Input
+                    label="Facebook"
+                    placeholder="Enter Facebook URL"
+                    labelPlacement="outside"
+                    fullWidth
+                    bordered
+                    size="md"
+                    onChange={(e) => {
+                      handleSocialMediaChange("facebook", e);
+                    }}
+                  />
+
+                  <Input
+                    label="Instagram"
+                    placeholder="Enter Instagram URL"
+                    labelPlacement="outside"
+                    fullWidth
+                    bordered
+                    size="md"
+                    onChange={(e) => {
+                      handleSocialMediaChange("instagram", e);
+                    }}
+                  />
+
+                  <Input
+                    label="Tik-Tok"
+                    placeholder="Enter Tik-Tok URL"
+                    labelPlacement="outside"
+                    fullWidth
+                    bordered
+                    size="md"
+                    onChange={(e) => {
+                      handleSocialMediaChange("tiktok", e);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </CardBody>
+
+          <CardFooter className="w-full justify-end pb-8 pt-8 px-10">
+            <Button
+              type="button"
+              className="bg-slate-700 text-white px-12"
+              size="md"
+              onPress={handleNext}
+            >
+              Next
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
+
+      {step === 2 && (
+        <Card className="w-full h-full flex flex-col" shadow="none">
+          <CardHeader className="sticky top-0 z-10 bg-white shadow-md py-6 flex-col justify-start items-start px-12">
+            <h3 className="text-base font-semibold leading-7 text-gray-900">
+              Applicant Information
+            </h3>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+              Personal details and application.
+            </p>
+          </CardHeader>
+
+          <CardBody className="flex-1 overflow-y-auto p-4">
+            <FormResults data={getValues()} />
+          </CardBody>
+
+          <CardFooter className="sticky bottom-0 z-10 bg-white  w-full justify-end pb-8 pt-8 px-10 gap-16 border-t-2">
+            <div className="flex flex-col gap-6 w-full justify-end">
+              <div className="flex justify-end px-8">
+                <CheckboxGroup>
+                  <Checkbox
+                    id="terms"
+                    name="terms"
+                    label="I agree with the terms and conditions"
+                    onChange={(e) => {
+                      setAgreement(e.target.checked);
+                    }}
+                  >
+                    I agree with the terms and conditions
+                  </Checkbox>
+                </CheckboxGroup>
+              </div>
+
+              <div className="flex justify-between px-8">
+                <Button variant="bordered" size="md" onPress={handlePrev}>
+                  Back to Form
                 </Button>
-                
-                {/* List of Services */}
-                {listOfServicesFields.map((item, index) => (
-                  <div key={item.id} className="mb-4">
-                    <Input
-                      {...register(`listOfServices.${index}.serviceName`)}
-                      placeholder="Service Name"
-                      isInvalid={!!errors.listOfServices?.[index]?.serviceName}
-                    />
-                    {errors.listOfServices?.[index]?.serviceName && <p>{errors.listOfServices[index]?.serviceName?.message}</p>}
-                    
-                    <Textarea
-                      {...register(`listOfServices.${index}.description`)}
-                      placeholder="Service Description"
-                      isInvalid={!!errors.listOfServices?.[index]?.description}
-                    />
-                    {errors.listOfServices?.[index]?.description && <p>{errors.listOfServices[index]?.description?.message}</p>}
-                    
-                    <Button type="button" onClick={() => removeService(index)}>Remove</Button>
-                  </div>
-                ))}
-                <Button type="button" onClick={() => appendService({ serviceName: "", description: "" })}>
-                  Add Service
-                </Button>
-                
-                <Input
-                  {...register("priceRange")}
-                  placeholder="Enter price range"
-                  isInvalid={!!errors.priceRange}
-                />
-                {errors.priceRange && <p>{errors.priceRange.message}</p>}
-                
-                <Select
-                  {...register("availableFacilities")}
-                  placeholder="Select facilities"
-                  isInvalid={!!errors.availableFacilities}
-                  multiple
+                <Button
+                  type="submit"
+                  className="bg-slate-700 text-white px-12"
+                  isDisabled={!agreement}
+                  size="md"
+                  disabled={!agreement}
                 >
-                  <SelectItem value="WiFi">WiFi</SelectItem>
-                  <SelectItem value="Parking">Parking</SelectItem>
-                  {/* Add more options as needed */}
-                </Select>
-                {errors.availableFacilities && <p>{errors.availableFacilities.message}</p>}
-                
-                <Input
-                  {...register("specialties")}
-                  placeholder="Enter specialties"
-                  isInvalid={!!errors.specialties}
-                />
-                {errors.specialties && <p>{errors.specialties.message}</p>}
-                
-               
-               </CardBody>
-            </Card>
-          </Tab>
-
-          <Tab key="last" title="Last">
-                <Card className="w-full" shadow="none">
-                  <CardBody className="w-full flex gap-4 p-0">
-
-                
-                <Input
-                  {...register("promotionalVideo")}
-                  placeholder="Enter promotional video URL"
-                  isInvalid={!!errors.promotionalVideo}
-                />
-                {errors.promotionalVideo && <p>{errors.promotionalVideo.message}</p>}
-                
-                <Input
-                  {...register("socialMediaLinks.facebook")}
-                  placeholder="Facebook URL"
-                  isInvalid={!!errors.socialMediaLinks?.facebook}
-                />
-                {errors.socialMediaLinks?.facebook && <p>{errors.socialMediaLinks.facebook.message}</p>}
-                
-                <Input
-                  {...register("socialMediaLinks.instagram")}
-                  placeholder="Instagram URL"
-                  isInvalid={!!errors.socialMediaLinks?.instagram}
-                />
-                {errors.socialMediaLinks?.instagram && <p>{errors.socialMediaLinks.instagram.message}</p>}
-                
-                <Input
-                  {...register("socialMediaLinks.twitter")}
-                  placeholder="Twitter URL"
-                  isInvalid={!!errors.socialMediaLinks?.twitter}
-                />
-                {errors.socialMediaLinks?.twitter && <p>{errors.socialMediaLinks.twitter.message}</p>}
-                
-                <Textarea
-                  {...register("description")}
-                  placeholder="Enter description"
-                  isInvalid={!!errors.description}
-                />
-                {errors.description && <p>{errors.description.message}</p>}
-                
-                <Textarea
-                  {...register("promotions")}
-                  placeholder="Enter promotions"
-                  isInvalid={!!errors.promotions}
-                />
-                {errors.promotions && <p>{errors.promotions.message}</p>}
-                
-                <Textarea
-                  {...register("additionalNotes")}
-                  placeholder="Additional notes"
-                  isInvalid={!!errors.additionalNotes}
-                />
-                {errors.additionalNotes && <p>{errors.additionalNotes.message}</p>}
-                
-                <Checkbox {...register("termsAndConditions")}>
-                  I agree to the terms and conditions
-                </Checkbox>
-                {errors.termsAndConditions && <p>{errors.termsAndConditions.message}</p>}
-                    
-                <Button type="submit" className="mt-4">Submit Listing</Button>
-
-                  </CardBody>
-                </Card>
-            </Tab>
-            
-
-
-          {/* Add other tabs as necessary */}
-        </Tabs>
-
-        
-      </form>
-    </div>
+                  Submit
+                </Button>
+              </div>
+            </div>
+          </CardFooter>
+        </Card>
+      )}
+    </form>
   );
 }

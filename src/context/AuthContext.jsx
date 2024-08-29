@@ -15,17 +15,17 @@ export function AuthProvider({ children }) {
     const login = async (email, password, remember) => {
 
         try {
-            await request(`/login`, "POST", { email, password });
+            const res = await request(`/login`, "POST", { email, password });
 
-            console.log(response);
+            console.log(res);
 
-            if (response) {
-                const decoded = jwtDecode(response.token);
+            if (res) {
+
                 const userData = {
-                    id: decoded.sub,
-                    email: decoded.email,
-                    role: decoded.role,
-                    token: response.token,
+                    id: res.data.userId,
+                    email: res.data.email,
+                    role: res.data.role,
+                    token: res.data.token,
                 };
 
                 if (remember) {
@@ -40,9 +40,10 @@ export function AuthProvider({ children }) {
                 } else if (userData.role.includes('CUSTOMER')) {
                     navigate('/');
                 } else if (userData.role.includes('STAFF')) {
-                    navigate('/barber');
+                    navigate('/staff');
                 }
             }
+
         } catch (err) {
             setError(err.message || 'Login failed');
         }

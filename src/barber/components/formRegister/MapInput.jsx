@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
+import { Button, Input } from '@nextui-org/react';
 
-export default function MapWithSearch() {
+export default function MapWithSearch({ address, setAddress }) {
   const [manualMarker, setManualMarker] = useState(null);
-  const [address, setAddress] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState(null);
 
@@ -32,11 +32,11 @@ export default function MapWithSearch() {
     const { lat, lng } = e.latlng;
     setManualMarker({ lat, lng });
     await fetchAddress(lat, lng);
+
   };
 
   // Function to handle search input
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  const handleSearch = async () => {
     try {
       const response = await axios.get('https://nominatim.openstreetmap.org/search', {
         params: {
@@ -51,15 +51,44 @@ export default function MapWithSearch() {
         setSearchResult({ lat, lng: lon, label: display_name });
         setManualMarker({ lat, lng: lon });
         await fetchAddress(lat, lon);
-
-        console.log(manualMarker)
-
       } else {
         alert('Location not found');
       }
     } catch (error) {
       console.error('Error searching for location:', error);
     }
+  };
+
+  // Function to handle "My Location" button click
+  const handleMyLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setManualMarker({ lat: latitude, lng: longitude });
+          setSearchResult({ lat: latitude, lng: longitude });
+          await fetchAddress(latitude, longitude);
+        },
+        (error) => {
+          console.error('Error getting current location:', error);
+          alert('Could not get your current location');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser');
+    }
+  };
+
+  // Custom component to center the map when search result changes
+  const CenterMapOnSearchResult = ({ lat, lng }) => {
+    const map = useMap();
+    useEffect(() => {
+      if (lat && lng) {
+        map.setView([lat, lng], 18);
+        setSearchResult(null);
+      }
+    }, [lat, lng, map]);
+    return null;
   };
 
   // Component to handle map events
@@ -72,22 +101,25 @@ export default function MapWithSearch() {
 
   return (
     <div>
-      <form onSubmit={handleSearch} className="mb-4 flex justify-between gap-4">
-        <input
+      <div className="mb-4 flex justify-between gap-4">
+        <Input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search for a location"
-          className="p-2 border rounded-md w-full"
+          className="w-full"
         />
-        <button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded-md">
+        <Button onPress={handleSearch} className="bg-blue-500 text-white rounded-md">
           Search
-        </button>
-      </form>
+        </Button>
+        <Button onPress={handleMyLocation} className="bg-green-500 text-white rounded-md">
+          My Location
+        </Button>
+      </div>
 
       <MapContainer
         center={manualMarker ? [manualMarker.lat, manualMarker.lng] : [-7.93473173312304, 112.60267493329516]}
-        zoom={manualMarker ? 18 : 18}
+        zoom={18}
         style={{ height: '400px', width: '100%' }}
       >
         <TileLayer
@@ -113,6 +145,9 @@ export default function MapWithSearch() {
           </Marker>
         )}
         <MapEvents />
+        {searchResult && (
+          <CenterMapOnSearchResult lat={searchResult.lat} lng={searchResult.lng} />
+        )}
       </MapContainer>
     </div>
   );
