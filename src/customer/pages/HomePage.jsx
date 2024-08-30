@@ -1,16 +1,23 @@
 import React from 'react'
 import Hero from '../components/Hero'
 import SearchBar from '../components/SearchBar'
-import Recomendation from '../components/Recomendation'
+import RecommendationCard from '../components/RecommendationCard.jsx'
+import LogoClouds from "../components/LogoClouds.jsx";
+import {FooterPage} from "./FooterPage.jsx";
+import Statistics from "../components/Statistics.jsx";
 
 const HomePage = () => {
-  return (
-    <>
-        <Hero />
-        {/* <SearchBar /> */}
-        <Recomendation />
-    </>
-  )
+    return (
+        <>
+            <Hero/>
+            {/* <SearchBar /> */}
+            <LogoClouds/>
+            <Statistics/>
+            <RecommendationCard/>
+            <RecommendationCard/>
+            <FooterPage/>
+        </>
+    )
 }
 
 export default HomePage
