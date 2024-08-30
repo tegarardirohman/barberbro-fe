@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '../hooks/useAxios';
-import {jwtDecode} from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -11,15 +10,14 @@ export function AuthProvider({ children }) {
     const navigate = useNavigate();
     const { response, error: axiosError, loading, request } = useAxios();
 
-    // Menangani Login
+    // Handle Login
     const login = async (email, password, remember) => {
-
         try {
-            const res = await request(`/login`, "POST", { email, password });
+            const res = await request('/login', 'POST', { email, password });
+
+            console.log(res)
 
             if (res) {
-                
-                console.log(res)
 
                 const userData = {
                     id: res.data.userId,
@@ -28,13 +26,17 @@ export function AuthProvider({ children }) {
                     token: res.data.token,
                 };
 
+                setUser(userData); // Update user state
+
                 if (remember) {
                     localStorage.setItem('user', JSON.stringify(userData));
                 } else {
                     sessionStorage.setItem('user', JSON.stringify(userData));
                 }
 
-                // Navigasi berdasarkan peran
+                console.log(userData)
+
+                // Navigate based on role
                 if (userData.role.includes('ADMIN')) {
                     navigate('/admin/');
                 } else if (userData.role.includes('CUSTOMER')) {
@@ -44,30 +46,32 @@ export function AuthProvider({ children }) {
                 }
 
             } else {
-                setError(axiosError);
+                setError(axiosError || 'Login failed');
+                console.log(axiosError || 'Login failed');
             }
-
         } catch (err) {
-            // setError(err.message || 'Login failed');
+            setError(err.message || 'Login failed');
             console.log("login failed", err);
-        }
+        } 
     };
 
-    // Menangani Registrasi
+    // Handle Registration
     const register = async (email, password) => {
-
         try {
-            await request(`/register`, "POST", { email, password, role: "CUSTOMER" });
+            const res = await request('/customer/register', 'POST', { email, password, role: "CUSTOMER" });
 
-            if (!axiosError) {
+            if (res) {
                 navigate('/');
+            } else {
+                setError(axiosError || 'Registration failed');
             }
         } catch (err) {
             setError(err.message || 'Registration failed');
-        }
+            console.log("registration failed", err);
+        } 
     };
 
-    // Menangani Logout
+    // Handle Logout
     const logout = useCallback(() => {
         setUser(null);
         localStorage.removeItem('user');
@@ -75,7 +79,7 @@ export function AuthProvider({ children }) {
         navigate('/');
     }, [navigate]);
 
-    // Memeriksa sesi yang tersimpan pada mount
+    // Check stored session on mount
     useEffect(() => {
         const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
         if (storedUser) {

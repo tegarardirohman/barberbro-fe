@@ -45,10 +45,13 @@ export default function ModalLogin({ props }) {
     try {
       await login(data.email, data.password, data.remember);
 
-      if(!error) {
+      console.log(error)
+
+      if(!error && user) {
+        console.log(error)
         onClose();
       } else {
-        form.setError("email", { type: "manual", message: error.response?.data?.message || "Login failed" });
+        form.setError("email", { type: "manual", message: error?.response?.data?.message || "Login failed" });
       }
 
     } catch (e) {

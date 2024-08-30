@@ -41,7 +41,15 @@ export default function ModalRegister({ props }) {
   const handleRegister = async (data) => {
     try {
       await register(data.email, data.password);
-      onClose();
+
+
+      if (!error) {
+        onClose();
+      } else {
+        form.setError("email", { type: "manual", message: error?.message || "Register failed" });
+      }
+
+      // onClose();
     } catch (error) {
       console.error("SignUp failed:", error);
     }
@@ -128,6 +136,9 @@ export default function ModalRegister({ props }) {
               </ModalBody>
               <ModalFooter className="block">
                 <div className="flex w-full flex-col gap-4 justify-end">
+
+                  {error && <p className="text-red-500">{error.response?.data?.message}</p>}
+
                   <Button size="lg" type="submit" variant="solid" className="bg-slate-800 text-white px-8 w-full">
                     Sign Up
                   </Button>

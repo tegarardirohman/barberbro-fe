@@ -4,6 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import { GrTransaction } from "react-icons/gr";
 import { PiHandWithdraw } from "react-icons/pi";
 import { RxDashboard } from "react-icons/rx";
+import { TbClockHour10 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
@@ -55,6 +56,15 @@ const Sidebar = () => {
                 Barbershop Profile
               </Button>
             </NavbarItem>
+
+            <NavbarItem className="w-full px-0">
+              <Button as={Link} to="/staff/schedule/" aria-current="page" className="w-full text-start justify-start font-semibold" variant="light">
+                <TbClockHour10 size={22} className="mr-2"/>
+                Schedule & Services
+              </Button>
+            </NavbarItem>
+
+
           </NavbarContent>
         </Navbar>
       </div>

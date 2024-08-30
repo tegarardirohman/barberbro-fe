@@ -15,18 +15,19 @@ const TopPanel = () => {
     <div className='w-full flex justify-between py-4 border-slate-200 border-b-2 px-8'>
 
             <div className="flex justify-between gap-8">
-                <Tooltip color="success" content="Tooltip 1" delay={1000}>
-                    <Button color="success" variant="flat" >
+                <Tooltip color="success" content="Transactions today: 10" delay={1000}>
+                    <Button color="success" variant="flat" radius='sm' >
                         Transactions:  10
                     </Button>
                 </Tooltip>
 
-                <Tooltip color="primary" content="Tooltip 1" delay={1000}>
-                    <Button color="primary" variant="flat" >
+                <Tooltip color="primary" content="Balance" delay={1000}>
+                    <Button color="primary" variant="flat" radius='sm' >
                         Balance: Rp. 200.000
                     </Button>
                 </Tooltip>
             </div>
+
 
             <Dropdown placement="bottom-end">
                 <DropdownTrigger>
