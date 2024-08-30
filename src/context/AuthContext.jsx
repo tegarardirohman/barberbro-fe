@@ -15,17 +15,17 @@ export function AuthProvider({ children }) {
     const login = async (email, password, remember) => {
 
         try {
-            await request(`/login`, "POST", { email, password });
+            const res = await request(`/login`, "POST", { email, password });
 
-            console.log(response);
+            if (res) {
+                
+                console.log(res)
 
-            if (response) {
-                const decoded = jwtDecode(response.token);
                 const userData = {
-                    id: decoded.sub,
-                    email: decoded.email,
-                    role: decoded.role,
-                    token: response.token,
+                    id: res.data.userId,
+                    email: res.data.email,
+                    role: res.data.role,
+                    token: res.data.token,
                 };
 
                 if (remember) {
@@ -40,11 +40,16 @@ export function AuthProvider({ children }) {
                 } else if (userData.role.includes('CUSTOMER')) {
                     navigate('/');
                 } else if (userData.role.includes('STAFF')) {
-                    navigate('/barber');
+                    navigate('/staff');
                 }
+
+            } else {
+                setError(axiosError);
             }
+
         } catch (err) {
-            setError(err.message || 'Login failed');
+            // setError(err.message || 'Login failed');
+            console.log("login failed", err);
         }
     };
 
@@ -67,7 +72,7 @@ export function AuthProvider({ children }) {
         setUser(null);
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
-        navigate('/login');
+        navigate('/');
     }, [navigate]);
 
     // Memeriksa sesi yang tersimpan pada mount

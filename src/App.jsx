@@ -7,18 +7,17 @@ import PrivateRoute from './guard/PrivateRoute';
 import {AuthProvider} from './context/AuthContext';
 
 function App() {
-    return (
-        <Router>
-            <AuthProvider>
-                <Routes>
-                    <Route path="/*" element={<CustomerApp/>}/>
-                    <Route path="/barbershop/*" element={<BarberApp/>}/>
-                    <Route path="/admin/*" element={<AdminApp/>}/>
-                    <Route path="/staff/*" element={<PrivateRoute role="staff"><BarberApp/></PrivateRoute>}/>
-                </Routes>
-            </AuthProvider>
-        </Router>
-    );
+  return (
+    <Router>
+      <AuthProvider>
+      <Routes>
+        <Route path="/*" element={ <CustomerApp /> } /> 
+        <Route path="/admin/*" element={<PrivateRoute role="ADMIN"><AdminApp /></PrivateRoute>} />
+        <Route path="/staff/*" element={<PrivateRoute role="STAFF"><BarberApp /></PrivateRoute>} />
+      </Routes>
+      </AuthProvider>
+    </Router>
+  );
 }
 
 export default App;
