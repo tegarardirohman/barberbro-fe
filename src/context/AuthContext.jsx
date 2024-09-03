@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '../hooks/useAxios';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -17,7 +18,7 @@ export function AuthProvider({ children }) {
 
             console.log(res)
 
-            if (res) {
+            if (res.statusCode === 201) {
 
                 const userData = {
                     id: res.data.userId,
@@ -45,9 +46,10 @@ export function AuthProvider({ children }) {
                     navigate('/staff');
                 }
 
+                return "success";
+
             } else {
-                setError(axiosError || 'Login failed');
-                console.log(axiosError || 'Login failed');
+                return res?.message;
             }
         } catch (err) {
             setError(err.message || 'Login failed');
@@ -60,10 +62,15 @@ export function AuthProvider({ children }) {
         try {
             const res = await request('/customer/register', 'POST', { email, password, role: "CUSTOMER" });
 
-            if (res) {
+            console.log(res)
+
+            if (res.status === 201) {
+                alert("Registration successful");
                 navigate('/');
+                return "success";
             } else {
                 setError(axiosError || 'Registration failed');
+                return res?.message;
             }
         } catch (err) {
             setError(err.message || 'Registration failed');

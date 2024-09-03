@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const useAxios = () => {
   axios.defaults.baseURL = 'http://10.10.102.48:8080/api/';
-  axios.defaults.headers.common['Content-Type'] = 'application/json';
+
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : JSON.parse(sessionStorage.getItem('user'));
+  if (user) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user?.token}`;
+  }
 
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const request = async (url, method = 'GET', body = null, headers = {}) => {
+  const request = async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
     setLoading(true);
     setError(null);  // Clear previous error
     setResponse(null); // Clear previous response
@@ -29,7 +34,7 @@ const useAxios = () => {
     } catch (err) {
       console.log('Error:', err);
       setError(err.response?.data || err.message);
-      return null; 
+      return err?.response; 
     } finally {
       setLoading(false);
     }

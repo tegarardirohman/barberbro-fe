@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import RegisterBarber from "../barber/pages/RegisterBarber";
 import NotFound from "./pages/NotFound.jsx";
+import BarbershopProfilePage from "./pages/BarbershopProfilePage.jsx";
 
 function CustomerApp() {
     return (
@@ -11,6 +12,7 @@ function CustomerApp() {
             <Route path="*" element={<NotFound/>}/>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/about" element={<AboutPage/>}/>
+            <Route path="/barber-detail" element={<BarbershopProfilePage />}/>
             <Route path="/register-barber" element={<RegisterBarber/>}/>
         </Routes>
     );

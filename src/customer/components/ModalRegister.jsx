@@ -40,10 +40,9 @@ export default function ModalRegister({ props }) {
 
   const handleRegister = async (data) => {
     try {
-      await register(data.email, data.password);
+      const res = await register(data.email, data.password);
 
-
-      if (!error) {
+      if (res === "success") {
         onClose();
       } else {
         form.setError("email", { type: "manual", message: error?.message || "Register failed" });

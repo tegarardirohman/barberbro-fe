@@ -1,13 +1,19 @@
 import { Button, Image, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import React from "react";
 import { CgProfile } from "react-icons/cg";
-import { GrTransaction } from "react-icons/gr";
+import { GrGallery, GrTransaction } from "react-icons/gr";
 import { PiHandWithdraw } from "react-icons/pi";
 import { RxDashboard } from "react-icons/rx";
 import { TbClockHour10 } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { AiOutlineDashboard } from "react-icons/ai";
+import { useAuth } from "../../../context/AuthContext";
 
 const Sidebar = () => {
+
+  const {user} = useAuth();
+  console.log(user)
+ 
   return (
     <div className="h-screen py-6 bg-white shadow-md w-full relative flex flex-col">
 
@@ -20,7 +26,7 @@ const Sidebar = () => {
 
             <NavbarItem className="mb-12">
               <Link color="foreground" to="/staff/">
-                <h1 className="font-bold text-xl">Hans Barbershop</h1>
+                <h1 className="font-bold text-xl"> Barberbro Admin </h1>
               </Link>
             </NavbarItem>
 
@@ -28,6 +34,13 @@ const Sidebar = () => {
               <Link color="foreground">
                 Overview
               </Link>
+            </NavbarItem>
+
+            <NavbarItem className="w-full px-0">
+              <Button as={Link} to="/staff/" aria-current="page" className="w-full text-start justify-start font-semibold" variant="light">
+                <AiOutlineDashboard size={22} className="mr-2"/>
+                Dashboard
+              </Button>
             </NavbarItem>
 
             <NavbarItem className="w-full px-0">
@@ -53,7 +66,14 @@ const Sidebar = () => {
             <NavbarItem className="w-full px-0">
               <Button as={Link} to="/staff/profile/" aria-current="page" className="w-full text-start justify-start font-semibold" variant="light">
                 <CgProfile size={22} className="mr-2"/>
-                Barbershop Profile
+                Profile
+              </Button>
+            </NavbarItem>            
+            
+            <NavbarItem className="w-full px-0">
+              <Button as={Link} to="/staff/gallery/" aria-current="page" className="w-full text-start justify-start font-semibold" variant="light">
+                <GrGallery size={22} className="mr-2"/>
+                Gallery
               </Button>
             </NavbarItem>
 

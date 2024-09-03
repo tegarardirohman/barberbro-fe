@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import ModalLogin from '../../customer/components/ModalLogin.jsx';
-import ModalRegister from '../../customer/components/ModalRegister.jsx';
-import logoWhite from '../../assets/images/logo-white.png';
 import logoGold from '../../assets/images/logo-gold.png';
-import logoBlack from '../../assets/images/logo-black.png';
 import {Button} from '@nextui-org/react';
+import ModalLogin from './ModalLogin';
+import ModalRegister from './ModalRegister';
 
-export const NavbarBarber = () => {
+const NavbarBarber = () => {
     const [scrolling, setScrolling] = useState(false);
     const [isOpenLogin, setIsOpenLogin] = useState(false);
     const [isOpenRegister, setIsOpenRegister] = useState(false);
@@ -37,11 +35,11 @@ export const NavbarBarber = () => {
             className={`w-full flex justify-between px-64 py-8 bg-zinc-900 shadow-sm`}>
             <div className='flex gap-4'>
                 <div className='flex gap-4'>
-                    <Button
+                    <Button as={Link} to="/"
                         className={`bg-transparent px-0 font-bold text-zinc-200`}>HOME</Button>
                 </div>
                 <div>
-                    <Button
+                    <Button as={Link} to="/about"
                         className={`bg-transparent px-0 font-bold text-zinc-200`}>ABOUT</Button>
                 </div>
             </div>
@@ -59,3 +57,5 @@ export const NavbarBarber = () => {
         </div>
     )
 }
+
+export default NavbarBarber

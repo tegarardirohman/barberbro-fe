@@ -21,24 +21,32 @@ const validationSchema = z.object({
   }).transform((data) => {
     const { confirm_password, ...rest } = data;
     return rest;
-  })
+  }),
   
-  
-  ,
-  operational_hours: z.array(z.object({
-    day: z.string().min(1, "Day is required"),
-    opening_time: z.string().min(1, "Opening time is required"),
-    closing_time: z.string().min(1, "Closing time is required"),
-  })).min(1, "At least one operational hour is required"),
+  operational_hours: z.array(
+    z.object({
+      day: z.string().min(1, "Day is required"),
+      opening_time: z.string().min(1, "Opening time is required"),
+      closing_time: z.string().min(1, "Closing time is required"),
+    }).refine((data) => {
+      const [openingHour] = data.opening_time.split(':').map(Number);
+      const [closingHour] = data.closing_time.split(':').map(Number);
+      return closingHour >= openingHour + 1;
+    }, {
+      message: "Closing time must be at least 1 hour after opening time",
+      path: ["closing_time"],
+    })
+  ).min(1, "At least one operational hour is required"),
+
   services: z.array(z.object({
     service_name: z.string().min(1, "Service name is required"),
     price: z.string().min(1, "Price is required"),
   })).min(1, "At least one service is required"),
+
   social_media: z.array(z.object({
     platform_name: z.string().min(1, "Platform name is required"),
     platform_url: z.string().optional(),
   })).optional(),
-
 });
 
 export default validationSchema;

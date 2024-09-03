@@ -3,7 +3,7 @@ import FormProfile from '../components/profile/FormProfile'
 
 const StaffProfile = () => {
   return (
-    <div>
+    <div className='w-full'>
       <FormProfile />
     </div>
   )

@@ -43,15 +43,13 @@ export default function ModalLogin({ props }) {
 
   const handleLogin = async (data) => {
     try {
-      await login(data.email, data.password, data.remember);
+      const res = await login(data.email, data.password, data.remember);
 
-      console.log(error)
-
-      if(!error && user) {
-        console.log(error)
+      if(res === "success") {
+        alert("Login successful");
         onClose();
       } else {
-        form.setError("email", { type: "manual", message: error?.response?.data?.message || "Login failed" });
+        form.setError("email", { type: "manual", message: res || "Login failed" });
       }
 
     } catch (e) {
@@ -59,9 +57,6 @@ export default function ModalLogin({ props }) {
     }
   };
 
-  // useEffect(() => {
-  //   form.setError("email", { type: "manual", message: error.response?.data?.message || "Login failed" });
-  // }, [error]);
 
   return (
     <>

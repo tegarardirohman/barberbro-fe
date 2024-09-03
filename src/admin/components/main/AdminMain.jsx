@@ -1,10 +1,9 @@
 import React from 'react';
-import Sidebar from '../components/main/Sidebar';
-import MainContent from '../components/main/MainContent';
-import TopPanel from '../components/main/TopPanel';
+import Sidebar from '../main/Sidebar';
+import TopPanel from '../main/TopPanel';
 import { Spacer } from '@nextui-org/react';
 
-const StaffMain = ({ page: Page }) => {
+const AdminMain = ({ page: Page }) => {
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -13,7 +12,7 @@ const StaffMain = ({ page: Page }) => {
       </div>
       
       {/* Main Content Area */}
-      <div className="flex-1 ml-80 pl-4">
+      <div className="flex-1 ml-80 pl-0">
         <TopPanel />
         <div className="pt-4 min-h-svh">
           <Page />
@@ -24,4 +23,4 @@ const StaffMain = ({ page: Page }) => {
   );
 };
 
-export default StaffMain;
+export default AdminMain;

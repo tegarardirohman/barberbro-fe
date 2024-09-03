@@ -1,4 +1,4 @@
-import {NavbarBarber} from "../../barber/components/NavbarBarber.jsx";
+import NavbarBarber from "../components/NavbarBarber.jsx";
 
 const people = [
     {

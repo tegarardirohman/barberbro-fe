@@ -1,6 +1,6 @@
-import {NavbarBarber} from "../components/NavbarBarber.jsx";
-import BarbershopOverview from "../components/BarbershopOverview.jsx";
-import ReviewsRating from "../components/ReviewsRating.jsx";
+import NavbarBarber from "../components/NavbarBarber";
+import BarbershopOverview from "../components/BarbershopOverview";
+import ReviewsRating from "../components/ReviewsRating";
 
 export default function BarbershopProfilePage() {
     return (

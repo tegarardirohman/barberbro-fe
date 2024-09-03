@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Checkbox, Input } from '@nextui-org/react';
+import { Checkbox, Input, TimeInput } from '@nextui-org/react';
 
 const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
   const { control } = useForm();
@@ -42,9 +42,11 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
             >
               {day.toLowerCase()}
             </Checkbox>
+
+
             <Controller
               name={`${day}-opening_time`}
-              control={control}
+              control={control}s
               render={({ field }) => (
                 <Input
                   type="time"
@@ -60,6 +62,7 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
                 />
               )}
             />
+
             <Controller
               name={`${day}-closing_time`}
               control={control}
@@ -77,7 +80,10 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
                   disabled={!isChecked(day)}
                 />
               )}
-            />
+            /> 
+
+
+
           </div>
         )
       )}

@@ -238,7 +238,7 @@ export default function MultiStepForm() {
             <Button as={Link} to={"/"}>
               <FaArrowLeft /> Back
             </Button>
-            <h2 className="text-xl font-bold">Register </h2>
+            <h2 className="text-xl font-bold">Join With Us </h2>
           </CardHeader>
 
           <CardBody className="w-full flex justify-start items-start px-10 py-8">
@@ -345,8 +345,9 @@ export default function MultiStepForm() {
                   <h2 className="pt-4 font-semibold">Barbershop Services</h2>
 
                   { errors.services && (
-                    <p className="text-red-500 pb-4">{errors.services?.message}</p>
+                    <p className="text-red-500 pb-4">{errors.services[0]?.message}</p>
                   )}
+
 
                   {services.map((service, index) => (
                     <div
@@ -363,6 +364,8 @@ export default function MultiStepForm() {
                         className="flex-1"
                         value={service.service}
                         onChange={(e) => handleServiceChange(index, e)}
+                        isInvalid={!!errors.services?.[index]?.service_name}
+                        errorMessage={errors.services?.[index]?.service_name?.message}
                       />
                       <Input
                         type="number"
@@ -374,6 +377,8 @@ export default function MultiStepForm() {
                         className="w-1/3"
                         value={service.price}
                         onChange={(e) => handleServiceChange(index, e)}
+                        isInvalid={!!errors.services?.[index]?.price}
+                        errorMessage={errors.services?.[index]?.price?.message}
                       />
                       <Button
                         type="button"
@@ -414,6 +419,8 @@ export default function MultiStepForm() {
                       size="md"
                       onChange={(e) => field.onChange(e.target.value)}
                       value={field.value || ""}
+                      isInvalid={!!errors.barbershop?.street_address}
+                      errorMessage={errors.barbershop?.street_address?.message}
                     />
                   )}
                 />
@@ -437,6 +444,8 @@ export default function MultiStepForm() {
                           field.onChange(e); // Update react-hook-form state
                           setCity(e.target.value);
                         }}
+                        isInvalid={!!errors.barbershop?.city}
+                        errorMessage={errors.barbershop?.city?.message}
                       />
                     )}
                   />
@@ -459,6 +468,8 @@ export default function MultiStepForm() {
                           field.onChange(e); // Update react-hook-form state
                           setStateProvinceRegion(e.target.value);
                         }}
+                        isInvalid={!!errors.barbershop?.state_province_region}
+                        errorMessage={errors.barbershop?.state_province_region?.message}
                       />
                     )}
                   />
@@ -483,6 +494,8 @@ export default function MultiStepForm() {
                           field.onChange(e); // Update react-hook-form state
                           setCountry(e.target.value);
                         }}
+                        isInvalid={!!errors.barbershop?.country}
+                        errorMessage={errors.barbershop?.country?.message}
                       />
                     )}
                   />
@@ -505,6 +518,8 @@ export default function MultiStepForm() {
                           field.onChange(e); // Update react-hook-form state
                           setPostalZipCode(e.target.value);
                         }}
+                        isInvalid={!!errors.barbershop?.postal_zip_code}
+                        errorMessage={errors.barbershop?.postal_zip_code?.message}
                       />
                     )}
                   />
