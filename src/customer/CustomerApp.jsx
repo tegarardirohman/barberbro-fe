@@ -8,6 +8,7 @@ import {ProfilePage} from "./pages/ProfilePage.jsx";
 import ProfileSection from "./components/ProfileSection.jsx";
 import AccountSection from "./components/AccountSection.jsx";
 import NotificationSection from "./components/NotificationSection.jsx";
+import BarbershopProfilePage from "../barber/pages/BarbershopProfilePage.jsx";
 
 function CustomerApp() {
     return (
@@ -20,6 +21,7 @@ function CustomerApp() {
             <Route path="/customer/profile" element={<ProfilePage page={ProfileSection}/>}/>
             <Route path="/customer/notification" element={<ProfilePage page={NotificationSection}/>}/>
             <Route path="/customer/account" element={<ProfilePage page={AccountSection}/>}/>
+            <Route path="/barbershop" element={<BarbershopProfilePage/>}/>
         </Routes>
     );
 }
