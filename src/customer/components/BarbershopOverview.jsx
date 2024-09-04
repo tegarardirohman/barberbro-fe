@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {StarIcon} from '@heroicons/react/20/solid'
 import {Radio, RadioGroup} from '@headlessui/react'
+import ModalBooking from "./ModalBooking.jsx";
 
 const product = {
     name: 'Eleven Four Barbershop',
@@ -232,13 +233,9 @@ export default function BarbershopOverview() {
                                     </RadioGroup>
                                 </fieldset>
                             </div>
-
-                            <button
-                                type="submit"
-                                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-zinc-800 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                Book Now
-                            </button>
+                            <div>
+                                <ModalBooking/>
+                            </div>
                         </form>
                     </div>
 

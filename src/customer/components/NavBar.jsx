@@ -53,12 +53,28 @@ const NavBar = () => {
         </div>
         <div className='flex gap-4'>
 
-            <div>
-              <ModalLogin props={scrolling} />
-            </div>
-            <div>
-              <ModalRegister props={scrolling} />
-            </div>
+          {
+            user ? (
+              <>
+                <div>
+                    <Button as={Link} to={'/customer/profile'} className={`bg-transparent px-0 font-bold ${scrolling ? 'text-black' : 'text-white'}`}>PROFILE</Button>
+                </div>
+                <div>
+                <Button onClick={logout} variant='bordered' className={`bg-transparent px-0 font-bold ${scrolling ? 'text-black' : 'text-white'}`}>LOGOUT</Button>
+              </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <ModalLogin props={scrolling} />
+                </div>
+                <div>
+                  <ModalRegister props={scrolling} />
+                </div>
+              </>
+            )
+          }
+
 
 
         </div>

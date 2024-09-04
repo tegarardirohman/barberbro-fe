@@ -4,6 +4,7 @@ import logoGold from '../../assets/images/logo-gold.png';
 import {Button} from '@nextui-org/react';
 import ModalLogin from './ModalLogin';
 import ModalRegister from './ModalRegister';
+import { useAuth } from '../../context/AuthContext';
 
 const NavbarBarber = () => {
     const [scrolling, setScrolling] = useState(false);
@@ -29,10 +30,13 @@ const NavbarBarber = () => {
         }
     };
 
+  const { user, error, loading, login, register, logout } = useAuth();
+
+
 
     return (
         <div
-            className={`w-full flex justify-between px-64 py-8 bg-zinc-900 shadow-sm`}>
+            className={`w-full flex justify-between px-64 py-8 bg-zinc-900 shadow-sm fixed top-0 z-50`}>
             <div className='flex gap-4'>
                 <div className='flex gap-4'>
                     <Button as={Link} to="/"
@@ -47,12 +51,27 @@ const NavbarBarber = () => {
                 <img src={logoGold} className='w-32 px-0 py-0 -mt-12 -mb-12' alt="logo"/>
             </div>
             <div className='flex gap-4'>
+            {
+            user ? (
+              <>
                 <div>
-                    <ModalLogin props={scrolling}/>
+                    <Button as={Link} to={'/customer/profile'} className={`bg-transparent px-0 font-bold text-white`}>PROFILE</Button>
                 </div>
                 <div>
-                    <ModalRegister props={scrolling}/>
+                <Button onClick={logout} variant='bordered' className={`bg-transparent px-0 font-bold text-white`}>LOGOUT</Button>
+              </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <ModalLogin props={scrolling} />
                 </div>
+                <div>
+                  <ModalRegister props={scrolling} />
+                </div>
+              </>
+            )
+          }
             </div>
         </div>
     )

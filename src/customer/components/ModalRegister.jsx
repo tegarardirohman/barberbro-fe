@@ -42,6 +42,8 @@ export default function ModalRegister({ props }) {
     try {
       const res = await register(data.email, data.password);
 
+      console.log("res", res);
+
       if (res === "success") {
         onClose();
       } else {

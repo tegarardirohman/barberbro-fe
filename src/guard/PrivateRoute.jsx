@@ -7,6 +7,7 @@ const PrivateRoute = ({ role, children }) => {
 
   const userData = userRole? JSON.parse(userRole) : JSON.parse(userSession);
 
+
   if (userData?.role !== role) {
     return <Navigate to="/" replace />;
   }

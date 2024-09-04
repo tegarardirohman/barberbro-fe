@@ -1,4 +1,8 @@
 import {StarIcon} from "@heroicons/react/20/solid/index.js";
+import { useEffect, useState } from "react";
+import useAxios from "../../hooks/useAxios";
+import { getImageUrl } from "../../utils/utils";
+import { Rating } from "react-simple-star-rating";
 
 const products = [
     {
@@ -75,6 +79,7 @@ const products = [
     }
 ]
 
+
 const reviews = {href: '#', average: 4, totalCount: 117}
 
 function classNames(...classes) {
@@ -82,6 +87,28 @@ function classNames(...classes) {
 }
 
 export default function RecommendationCard() {
+    const [datas, setDatas] = useState([])
+    const { response, error, loading, request } = useAxios();
+
+
+    const fetchDatas = async () => {
+        try {
+            const result = await request('/barbers');
+            setDatas(result.data);
+            console.log(datas)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchDatas();
+    }, []);
+
+
+
+
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
@@ -93,63 +120,33 @@ export default function RecommendationCard() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                    {products.map((product) => (
-                        <div key={product.id} className="group relative">
+
+
+                    {datas.map((data) => (
+                        <div key={data.id} className="group relative">
                             <div
                                 className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                                 <img
-                                    alt={product.imageAlt}
-                                    src={product.imageSrc}
+                                    alt={data.barbershop_profile_picture_id.name}
+                                    src={getImageUrl(data.barbershop_profile_picture_id.path)}
                                     className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                 />
                             </div>
-                            <div className="mt-4 flex justify-between">
-                                <div>
-                                    <h3 className="text-md font-bold text-zinc-900">
-                                        <a href={product.href}>
-                                            <span aria-hidden="true" className="absolute inset-0"/>
-                                            {product.name}
-                                        </a>
-                                    </h3>
-                                    {/* Reviews */}
-                                    <div className="mt-2">
-                                        <h3 className="sr-only">Reviews</h3>
-                                        <div className="flex items-center">
-                                            <div className="flex items-center">
-                                                {[0, 1, 2, 3, 4].map((rating) => (
-                                                    <StarIcon
-                                                        key={rating}
-                                                        aria-hidden="true"
-                                                        className={classNames(
-                                                            reviews.average > rating ? 'text-gray-900' : 'text-gray-200',
-                                                            'h-3 w-3 flex-shrink-0',
-                                                        )}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <p className="sr-only">{reviews.average} out of 5 stars</p>
-                                            <a href={reviews.href}
-                                               className="ml-3 text-sm font-medium text-zinc-900 hover:text-zinc-800">
-                                                {reviews.totalCount} reviews
-                                            </a>
-                                        </div>
-                                    </div>
 
-                                </div>
+                            <h3 className="text-md font-bold text-zinc-900 mt-2">
+                                { data.name }
+                            </h3>
 
-                                <div className="flex flex-row items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                         className="size-3">
-                                        <path fillRule="evenodd"
-                                              d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                              clipRule="evenodd"/>
-                                    </svg>
-                                    <p className="px-1 text-xs text-zinc-900">3.2 Km</p>
-                                </div>
-
+                            <div className="w-full flex items-end justify-start gap-2">
+                                <Rating initialValue={data.average_rating} size={20} readonly />
+                                <div className="text-xs font-light"> ( {data.review_count} Reviews) </div>
                             </div>
+
+
                         </div>
                     ))}
+
+
                 </div>
             </div>
         </div>

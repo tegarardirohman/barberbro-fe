@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const useAxios = () => {
-  axios.defaults.baseURL = 'http://10.10.102.48:8080/api/';
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : JSON.parse(sessionStorage.getItem('user'));
+
   if (user) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${user?.token}`;
   }
@@ -16,8 +17,8 @@ const useAxios = () => {
 
   const request = async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
     setLoading(true);
-    setError(null);  // Clear previous error
-    setResponse(null); // Clear previous response
+    setError(null);  
+    setResponse(null);
 
     try {
       const result = await axios({

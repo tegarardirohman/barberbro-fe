@@ -7,7 +7,7 @@ import { Spacer } from '@nextui-org/react';
 const StaffMain = ({ page: Page }) => {
   return (
     <div className="flex">
-      {/* Sidebar */}
+      {/* SideBarCustomer */}
       <div className="fixed top-0 bottom-0 left-0 w-80 h-screen bg-gray-100">
         <Sidebar />
       </div>

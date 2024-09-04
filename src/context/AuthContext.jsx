@@ -62,9 +62,7 @@ export function AuthProvider({ children }) {
         try {
             const res = await request('/customer/register', 'POST', { email, password, role: "CUSTOMER" });
 
-            console.log(res)
-
-            if (res.status === 201) {
+            if (res.statusCode === 201) {
                 alert("Registration successful");
                 navigate('/');
                 return "success";

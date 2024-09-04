@@ -5,6 +5,7 @@ import RecommendationCard from '../components/RecommendationCard.jsx'
 import LogoClouds from "../components/LogoClouds.jsx";
 import {FooterPage} from "./FooterPage.jsx";
 import Statistics from "../components/Statistics.jsx";
+import GetLocation from '../components/GetLocation.jsx';
 
 const HomePage = () => {
     return (
@@ -16,6 +17,8 @@ const HomePage = () => {
             <RecommendationCard/>
             <RecommendationCard/>
             <FooterPage/>
+
+            <GetLocation />
         </>
     )
 }

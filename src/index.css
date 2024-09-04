@@ -44,6 +44,11 @@ video {
   border-color: #ddc686;
 }
 
+svg.star-svg {
+  display: inline;
+}
+
+
 
 
 
