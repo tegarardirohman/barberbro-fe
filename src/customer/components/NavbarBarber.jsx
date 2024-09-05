@@ -39,8 +39,8 @@ const NavbarBarber = () => {
             className={`w-full flex justify-between px-64 py-8 bg-zinc-900 shadow-sm fixed top-0 z-50`}>
             <div className='flex gap-4'>
                 <div className='flex gap-4'>
-                    <Button as={Link} to="/"
-                        className={`bg-transparent px-0 font-bold text-zinc-200`}>HOME</Button>
+                    <Button as={Link} to="/explore"
+                        className={`bg-transparent px-0 font-bold text-zinc-200`}>EXPLORE</Button>
                 </div>
                 <div>
                     <Button as={Link} to="/about"
@@ -48,17 +48,20 @@ const NavbarBarber = () => {
                 </div>
             </div>
             <div className='text-3xl font-extrabold'>
-                <img src={logoGold} className='w-32 px-0 py-0 -mt-12 -mb-12' alt="logo"/>
+                <Link to={'/'}>
+                    <img src={logoGold} className='w-32 px-0 py-0 -mt-12 -mb-12' alt="logo"/>
+                </Link>
+
             </div>
             <div className='flex gap-4'>
             {
             user ? (
               <>
                 <div>
-                    <Button as={Link} to={'/customer/profile'} className={`bg-transparent px-0 font-bold text-white`}>PROFILE</Button>
+                <Button as={Link} to={'/transaction'} className={`bg-transparent px-0 font-bold text-white`}>TRANSACTION</Button>
                 </div>
                 <div>
-                <Button onClick={logout} variant='bordered' className={`bg-transparent px-0 font-bold text-white`}>LOGOUT</Button>
+                    <Button as={Link} to={'/customer/profile'} className={`bg-transparent px-0 font-bold text-white`}>PROFILE</Button>
               </div>
               </>
             ) : (

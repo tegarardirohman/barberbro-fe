@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const useLocation = () => {
+const useLocation = ({autofetch = false}) => {
     const [userLocation, setUserLocation] = useState(null);
 
     const getUserLocation = () => {

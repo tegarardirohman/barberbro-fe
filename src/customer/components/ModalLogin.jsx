@@ -19,7 +19,7 @@ import { useAuth } from "../../context/AuthContext";
 import { FaEyeLowVision, FaLockOpen } from "react-icons/fa6";
 import logoBlack from "../../assets/images/logo-black.png";
 
-export default function ModalLogin({ props }) {
+export default function ModalLogin({ props, position }) {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const { user, error, loading, login, register, logout } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -63,7 +63,7 @@ export default function ModalLogin({ props }) {
       <Button
         onPress={onOpen}
         className={`bg-transparent px-0 font-bold ${
-          props ? "text-black" : "text-white"
+          props && position ? "text-black" : "text-white"
         }`}
       >
         LOGIN

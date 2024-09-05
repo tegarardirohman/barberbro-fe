@@ -1,6 +1,7 @@
 import React from 'react';
 import SideBarCustomer from "../components/SideBarCustomer.jsx";
 import NavbarBarber from '../components/NavbarBarber.jsx';
+import { FooterPage } from './FooterPage.jsx';
 
 export const ProfilePage = ({page: Page}) => {
     return (
@@ -15,6 +16,8 @@ export const ProfilePage = ({page: Page}) => {
                     <Page/>
                 </div>
             </main>
+
+            <FooterPage />
         </>
     );
 };

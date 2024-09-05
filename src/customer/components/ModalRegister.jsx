@@ -23,7 +23,7 @@ const registerSchema = z.object({
   }
 });
 
-export default function ModalRegister({ props }) {
+export default function ModalRegister({ props, position }) {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const { request } = useAxios();
 
@@ -63,7 +63,7 @@ export default function ModalRegister({ props }) {
 
   return (
     <>
-      <Button onPress={onOpen} variant="bordered" className={`bg-transparent px-6 font-bold ${props ? 'text-black' : 'text-white'}`}>
+      <Button onPress={onOpen} variant="bordered" className={`bg-transparent px-6 font-bold ${ props && position ? 'text-black' : 'text-white'}`}>
         SIGN UP
       </Button>
       <Modal

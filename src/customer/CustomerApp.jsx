@@ -9,6 +9,8 @@ import ProfileSection from "./components/ProfileSection.jsx";
 import AccountSection from "./components/AccountSection.jsx";
 import NotificationSection from "./components/NotificationSection.jsx";
 import BarbershopProfilePage from "./pages/BarbershopProfilePage.jsx";
+import TransactionPage from "./pages/TransactionPage.jsx";
+import ExplorePage from "./pages/ExplorePage.jsx";
 
 function CustomerApp() {
     return (
@@ -16,13 +18,14 @@ function CustomerApp() {
             <Route path="*" element={<NotFound/>}/>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/about" element={<AboutPage/>}/>
-            <Route path="/barber-detail" element={<BarbershopProfilePage />}/>
+            <Route path="/explore" element={<ExplorePage/>}/>
+            <Route path="/transaction" element={<TransactionPage/>}/>
             <Route path="/register-barber" element={<RegisterBarber/>}/>
             <Route path="/customer" element={<ProfilePage/>}/>
             <Route path="/customer/profile" element={<ProfilePage page={ProfileSection}/>}/>
             <Route path="/customer/notification" element={<ProfilePage page={NotificationSection}/>}/>
             <Route path="/customer/account" element={<ProfilePage page={AccountSection}/>}/>
-            <Route path="/barbershop" element={<BarbershopProfilePage/>}/>
+            <Route path="/barbershop/:id" element={<BarbershopProfilePage/>}/>
         </Routes>
     );
 }

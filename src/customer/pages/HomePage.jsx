@@ -6,6 +6,7 @@ import LogoClouds from "../components/LogoClouds.jsx";
 import {FooterPage} from "./FooterPage.jsx";
 import Statistics from "../components/Statistics.jsx";
 import GetLocation from '../components/GetLocation.jsx';
+import NearbyBarber from '../components/NearbyBarber.jsx';
 
 const HomePage = () => {
     return (
@@ -14,11 +15,9 @@ const HomePage = () => {
             {/* <SearchBar /> */}
             <LogoClouds/>
             <Statistics/>
-            <RecommendationCard/>
+            <NearbyBarber />
             <RecommendationCard/>
             <FooterPage/>
-
-            <GetLocation />
         </>
     )
 }

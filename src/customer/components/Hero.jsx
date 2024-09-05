@@ -3,7 +3,6 @@ import ReactPlayer from 'react-player';
 import heroSrc from '../../assets/videos/horizontal_.webm';
 import NavBar from './NavBar';
 import { Button } from '@nextui-org/react';
-import { BiSolidRightArrow } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 
 const Hero = () => {

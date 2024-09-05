@@ -3,8 +3,12 @@ import React from "react";
 import {CgProfile} from "react-icons/cg";
 import {Link} from "react-router-dom";
 import {IoLogOutOutline, IoNotificationsOutline, IoSettingsOutline} from "react-icons/io5";
+import { useAuth } from "../../context/AuthContext";
 
 const SideBarCustomer = () => {
+
+    const {currentUser, logout} = useAuth();
+
     return (
         <div className="h-full py-6 flex flex-col">
             <div className="pt-2">
@@ -37,7 +41,7 @@ const SideBarCustomer = () => {
                             </Button>
                         </NavbarItem>
                         <NavbarItem className="w-full px-0">
-                            <Button as={Link} to="/customer/notification/" aria-current="page"
+                            <Button onClick={logout} aria-current="page"
                                     className="w-full text-start justify-start font-semibold text-red-600"
                                     variant="light">
                                 <IoLogOutOutline size={22} className="mr-2"/>

@@ -3,6 +3,7 @@ import Stats from '../components/dashboard/Stats';
 import TransactionChart from '../components/dashboard/TransactionChart';
 import { Card } from '@nextui-org/react';
 import ServiceChart from '../components/dashboard/ServiceChart';
+import { Rating } from 'react-simple-star-rating';
 
 const StaffDashboard = () => {
   return (
@@ -22,8 +23,8 @@ const StaffDashboard = () => {
           </Card>
 
           <Card className='w-full p-4'>
-            <h2 className='text-xl font-bold'>Transaction</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat sunt odit mollitia illum obcaecati? Accusamus modi quo, blanditiis, laudantium molestias est mollitia consequatur expedita, dolorum quasi tenetur sequi neque repudiandae.</p>
+            <h2 className='text-xl font-bold mb-4'>Barber Rating</h2>
+            <Rating initialValue={3.5} size={32} readonly tooltipArray={[1, 2, 3, 4, 5]} />
           </Card>
 
         </div>
