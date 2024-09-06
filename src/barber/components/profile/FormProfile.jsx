@@ -18,77 +18,10 @@ import MapInput from "../formRegister/MapInput";
 import ImageInput from "../formRegister/ImageInput";
 
 const FormProfile = () => {
-  // dummy data
-  const data = {
-    id: "barbershop-12345",
-    name: "Urban Cuts",
-    contact_number: "+628123456789",
-    email: "urbancuts@example.com",
-    street_address: "Jl. Kebon Jeruk No. 45",
-    city: "Jakarta",
-    state_province_region: "DKI Jakarta",
-    postal_zip_code: "11530",
-    country: "Indonesia",
-    latitude: -6.202394,
-    longitude: 106.65271,
-    description: "A modern barbershop offering premium grooming services.",
-    balance: 1500000,
-    verified: true,
-    barbershop_profile_picture_id: {
-      id: "profile-pic-67890",
-      name: "barbershop_logo.png",
-      path: "/images/barbershop_logo.png",
-      size: 102400,
-      contentType: "image/png",
-      createdAt: 1690995200000,
-      updatedAt: 1690995200000,
-    },
-    operational_hours: [
-      {
-        operating_hours_id: "hours-001",
-        barbershop_id: "barbershop-12345",
-        day: "Monday",
-        opening_time: "09:00",
-        closing_time: "18:00",
-      },
-      {
-        operating_hours_id: "hours-002",
-        barbershop_id: "barbershop-12345",
-        day: "Tuesday",
-        opening_time: "09:00",
-        closing_time: "18:00",
-      },
-      // Add more days as needed
-    ],
-    services: [
-      {
-        service_id: "service-123",
-        service_name: "Haircut",
-        price: 50000,
-      },
-      {
-        service_id: "service-124",
-        service_name: "Shave",
-        price: 30000,
-      },
-    ],
-    social_media: [
-      {
-        social_media_id: "social-001",
-        platform_name: "Instagram",
-        platform_url: "https://www.instagram.com/urbancuts",
-      },
-      {
-        social_media_id: "social-002",
-        platform_name: "Facebook",
-        platform_url: "https://www.facebook.com/urbancuts",
-      },
-    ],
-    createdAt: 1690995200000,
-    updatedAt: 1693587200000,
-  };
 
-  //
+
+  const [data, setData] = useState(null);
+
   const [address, setAddress] = useState(null);
   const [socialMedia, setSocialMedia] = useState([
     { platform_name: "Facebook", platform_url: "" },
@@ -108,8 +41,8 @@ const FormProfile = () => {
     resolver: zodResolver(validationSchema),
     defaultValues: {
       barbershop: {
-        id: data.id,
-        barbershop_profile_picture_id: data.barbershop_profile_picture_id,
+        id: "",
+        barbershop_profile_picture_id: "",
         name: "",
         contact_number: "",
         email: "",
@@ -132,6 +65,26 @@ const FormProfile = () => {
 
   const { response, error, loading, request } = useAxios();
   const navigate = useNavigate();
+
+
+  // fetch data
+
+  const fetchData = async () => {
+    try {
+      const res = await request("/barbers/current");
+      console.log(res.data);
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -159,6 +112,8 @@ const FormProfile = () => {
 
   useEffect(() => {
     if (data) {
+      setValue("barbershop.id", data.id);
+      setValue("barbershop.barbershop_profile_picture_id", data.barbershop_profile_picture_id);
       setValue("barbershop.name", data.name);
       setValue("barbershop.contact_number", data.contact_number);
       setValue("barbershop.email", data.email);
@@ -177,7 +132,7 @@ const FormProfile = () => {
 
       setValue("social_media", data.social_media);
     }
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (address) {

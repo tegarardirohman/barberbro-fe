@@ -6,8 +6,10 @@ import NearbyBarberExplore from '../components/explore/NearbyBarberExplore'
 import NearbyBarber from '../components/NearbyBarber'
 import RecommendationCard from '../components/RecommendationCard'
 import { FooterPage } from './FooterPage'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 const ExplorePage = () => {
+  useDocumentTitle('Explore Barberbro In World')
   return (
     <>
       {/* <NavbarBarber /> */}

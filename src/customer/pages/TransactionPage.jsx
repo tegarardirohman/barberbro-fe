@@ -409,13 +409,24 @@ const TransactionPage = () => {
       };
 
       const [transactions, setTransactions] = useState([]);
-      const { response, error, loading } = useAxios();
+      const { response, error, loading, request } = useAxios();
       const [status, setStatus] = useState("all");
       const [filteredData, setFilteredData] = useState([]);
 
+      const fetchData = async () => {
+        try {
+          const res = await request('/bookings/current');
+          console.log(res)
+          setTransactions(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
       useEffect(() => {
-        setTransactions(response_data.data);
-        console.log(response_data.data);
+        fetchData();
+        // setTransactions(response_data.data);
+        // console.log(response_data.data);
       }, [])
 
 

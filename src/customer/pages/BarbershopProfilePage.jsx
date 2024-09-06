@@ -1,16 +1,19 @@
 import NavbarBarber from "../components/NavbarBarber";
-import BarbershopOverview from "../components/BarbershopOverview";
-import ReviewsRating from "../components/ReviewsRating";
+import BarbershopOverview from "../components/barberProfile/BarbershopOverview";
+import ReviewsRating from "../components/barberProfile/ReviewsRating";
 import { useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function BarbershopProfilePage() {
     const { id } = useParams();
     const { response, error, loading, request } = useAxios();
     const [data, setData] = useState({});
     const [reviews, setReviews] = useState([]);
+
+    useDocumentTitle('Profile Page')
     
     const fetchData = async () => {
         try {

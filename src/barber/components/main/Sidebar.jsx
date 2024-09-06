@@ -11,8 +11,8 @@ import { useAuth } from "../../../context/AuthContext";
 
 const Sidebar = () => {
 
-  const {user} = useAuth();
-  console.log(user)
+  const {userDetail} = useAuth();
+
  
   return (
     <div className="h-screen py-6 bg-white shadow-md w-full relative flex flex-col">
@@ -26,7 +26,7 @@ const Sidebar = () => {
 
             <NavbarItem className="mb-12">
               <Link color="foreground" to="/staff/">
-                <h1 className="font-bold text-xl"> Barberbro Admin </h1>
+                <h1 className="font-bold text-xl"> { userDetail?.name } </h1>
               </Link>
             </NavbarItem>
 

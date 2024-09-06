@@ -4,10 +4,15 @@ import React, { useState } from 'react'
 import { FaServicestack } from 'react-icons/fa';
 import { Fa42Group } from 'react-icons/fa6';
 import OperationalHoursInput from '../components/formRegister/OperationalHoursInput';
+import { useAuth } from '../../context/AuthContext';
 
 const StaffOpsService = () => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [operationalHours, setOperationalHours] = useState([]);
+
+    const {user, userDetail} = useAuth();
+
+    console.log(userDetail)
 
     const rows = [
         {

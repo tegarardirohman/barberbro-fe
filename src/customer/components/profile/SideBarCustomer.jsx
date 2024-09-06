@@ -3,7 +3,7 @@ import React from "react";
 import {CgProfile} from "react-icons/cg";
 import {Link} from "react-router-dom";
 import {IoLogOutOutline, IoNotificationsOutline, IoSettingsOutline} from "react-icons/io5";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
 const SideBarCustomer = () => {
 

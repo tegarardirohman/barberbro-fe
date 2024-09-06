@@ -2,14 +2,15 @@ import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, 
 import React from 'react'
 import { useAuth } from '../../../context/AuthContext';
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
+import { getImageUrl, rupiah } from '../../../utils/utils';
 
 const TopPanel = () => {
 
-    const { user, logout } = useAuth();
+    const { user, userDetail, logout } = useAuth();
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
 
-    console.log(user)
+
     
   return (
     <div className='w-full flex justify-between py-4 border-slate-200 border-b-2 px-8'>
@@ -23,7 +24,7 @@ const TopPanel = () => {
 
                 <Tooltip color="primary" content="Balance" delay={1000}>
                     <Button color="primary" variant="flat" radius='sm' >
-                        Balance: Rp. 200.000
+                        Balance: { rupiah(userDetail?.balance) }
                     </Button>
                 </Tooltip>
             </div>
@@ -36,7 +37,7 @@ const TopPanel = () => {
                     as="button"
                     className="transition-transform"
                     name={user?.email || 'user email'}
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                    src={ getImageUrl(userDetail?.barbershop_profile_picture_id?.path)}
                 />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Profile Actions" variant="flat">

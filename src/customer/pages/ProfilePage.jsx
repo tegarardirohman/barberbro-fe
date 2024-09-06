@@ -1,9 +1,11 @@
 import React from 'react';
-import SideBarCustomer from "../components/SideBarCustomer.jsx";
 import NavbarBarber from '../components/NavbarBarber.jsx';
 import { FooterPage } from './FooterPage.jsx';
+import useDocumentTitle from '../../hooks/useDocumentTitle.jsx';
+import SideBarCustomer from '../components/profile/SideBarCustomer.jsx';
 
 export const ProfilePage = ({page: Page}) => {
+    useDocumentTitle('Profile')
     return (
         <>
             <NavbarBarber/>

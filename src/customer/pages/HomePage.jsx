@@ -7,8 +7,10 @@ import {FooterPage} from "./FooterPage.jsx";
 import Statistics from "../components/Statistics.jsx";
 import GetLocation from '../components/GetLocation.jsx';
 import NearbyBarber from '../components/NearbyBarber.jsx';
+import useDocumentTitle from '../../hooks/useDocumentTitle.jsx';
 
 const HomePage = () => {
+    useDocumentTitle('Barberbro - Home')
     return (
         <>
             <Hero/>

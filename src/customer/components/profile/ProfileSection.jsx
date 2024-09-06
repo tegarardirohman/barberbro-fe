@@ -1,10 +1,10 @@
 import { Button, Image, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { Controller, useForm } from "react-hook-form";
-import useAxios from "../../hooks/useAxios";
 import { useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { convertDateToLong, convertLongToDate } from "../../utils/utils";
-import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useAxios from "../../../hooks/useAxios";
+import useDocumentTitle from "../../../hooks/useDocumentTitle";
+import { convertDateToLong } from "../../../utils/utils";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function ProfileSection() {
     useDocumentTitle('Barberbro - Profile')
@@ -67,9 +67,9 @@ export default function ProfileSection() {
 
     return (
         <section className="px-14 mt-32">
-            <p className="text-zinc-600 text-md font-bold my-4">Profile Picture</p>
+            {/* <p className="text-zinc-600 text-md font-bold my-4">Profile Picture</p> */}
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-row items-center gap-x-4">
+                {/* <div className="flex flex-row items-center gap-x-4">
                     <div>
                         <Image
                             width={100}
@@ -85,9 +85,9 @@ export default function ProfileSection() {
                     <div>
                         <Button color="danger" size="sm" variant="light">Remove picture</Button>
                     </div>
-                </div>
+                </div> */}
                 <div>
-                    <p className="text-zinc-600 text-md mt-8 mb-4">Edit your profile info</p>
+                    <p className="text-black text-lg font-bold mt-8 mb-8">Edit your profile info</p>
                 </div>
                 <div className="flex flex-col gap-y-4">
                     <div className="flex gap-4">

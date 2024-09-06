@@ -1,3 +1,4 @@
+import useDocumentTitle from "../../hooks/useDocumentTitle.jsx";
 import NavbarBarber from "../components/NavbarBarber.jsx";
 import { FooterPage } from "./FooterPage.jsx";
 
@@ -29,6 +30,9 @@ const people = [
 ]
 
 export default function AboutPage() {
+
+    useDocumentTitle('About Page')
+
     return (
         <>
             <NavbarBarber/>

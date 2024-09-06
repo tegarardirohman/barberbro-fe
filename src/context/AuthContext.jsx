@@ -1,22 +1,47 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '../hooks/useAxios';
-import axios from 'axios';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [error, setError] = useState(null); // Track errors
-    const navigate = useNavigate();
+    const [error, setError] = useState(null); 
     const { response, error: axiosError, loading, request } = useAxios();
+    const [userDetail, setUserDetail] = useState({});
+    
+    
+    const navigate = useNavigate();
+
+
+    // fetch user details
+    const fetchUserDetail = async (role) => {
+        try {
+            const res = await request(`/${role}/current`);
+            setUserDetail(res.data);
+            return res.data;
+        } catch (error) {
+            console.log(error);
+            return null; 
+        }
+    };
+    
+    const refreshUserDetail = async () => {
+        let detail = null;
+    
+        if (user?.role.includes('CUSTOMER')) {
+            detail = await fetchUserDetail('customers');
+        } else if (user?.role.includes('STAFF')) {
+            detail = await fetchUserDetail('barbers');
+        }
+    
+        return detail;
+    };
 
     // Handle Login
     const login = async (email, password, remember) => {
         try {
             const res = await request('/login', 'POST', { email, password });
-
-            console.log(res)
 
             if (res.statusCode === 201) {
 
@@ -35,14 +60,16 @@ export function AuthProvider({ children }) {
                     sessionStorage.setItem('user', JSON.stringify(userData));
                 }
 
-                console.log(userData)
 
                 // Navigate based on role
                 if (userData.role.includes('ADMIN')) {
                     navigate('/admin/');
                 } else if (userData.role.includes('CUSTOMER')) {
+                    fetchUserDetail('customers');
                     navigate('/');
+
                 } else if (userData.role.includes('STAFF')) {
+                    fetchUserDetail('barbers');
                     navigate('/staff');
                 }
 
@@ -79,6 +106,7 @@ export function AuthProvider({ children }) {
     // Handle Logout
     const logout = useCallback(() => {
         setUser(null);
+        setUserDetail({});
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
         navigate('/');
@@ -98,7 +126,7 @@ export function AuthProvider({ children }) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, error, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ user, userDetail, refreshUserDetail , error, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

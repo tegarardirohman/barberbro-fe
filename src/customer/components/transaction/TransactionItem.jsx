@@ -1,6 +1,7 @@
-import { Card, CardHeader, CardBody, Chip, TableHeader, TableColumn, TableBody, TableRow, TableCell, Table } from '@nextui-org/react'
+import { Card, CardHeader, CardBody, Chip, TableHeader, TableColumn, TableBody, TableRow, TableCell, Table, CardFooter, Button } from '@nextui-org/react'
 import React from 'react'
 import { convertLongToDate, getImageUrl, rupiah } from '../../../utils/utils'
+import { Link } from 'react-router-dom'
 
 const TransactionItem = ({ data }) => {
 
@@ -28,9 +29,10 @@ const TransactionItem = ({ data }) => {
 
             <Card key={index} className='p-4 mb-6 flex flex-row border-1' shadow='none' radius='none'>
 
-                <div className='h-full w-1/4 aspect-square bg-red-300 rounded-md'>
-                    <img src={getImageUrl(item.barber.barbershop_profile_picture_id.path)} alt={item.barber.name} className='rounded-md' />
-                </div>
+                
+                <Link to={"/barbershop/" + item.barber.id} className='h-full w-1/4 aspect-square bg-red-300 rounded-md'>
+                    <img src={getImageUrl(item.barber.barbershop_profile_picture_id.path)} alt={item.barber.name} className='rounded-md h-full object-cover' />
+                </Link>
 
                 <div className='flex-1'>
                 <CardHeader className='border-b-1'>
@@ -40,7 +42,7 @@ const TransactionItem = ({ data }) => {
                 </CardHeader>
                 <CardBody className='flex flex-row gap-8 justify-between'>
 
-                <div className='text-sm flex flex-col ml-4 w-1/4'>
+                <div className='text-sm flex flex-col ml-4 w-1/3'>
                         <h3 className='font-bold pb-2'>Booking: </h3>
                         <table className='border-spacing-y-2'>
                             <tbody className='border-spacing-y-2'>
@@ -89,10 +91,26 @@ const TransactionItem = ({ data }) => {
                         </TableBody>
                         </Table>
 
+                        <div className="flex justify-end gap-4">
+
+                            {
+                                item.status.toLowerCase() === "pending" && (
+                                    <>
+                                        <Button size="sm" color="danger" className="w-24"> Cancel </Button>
+                                        <Button size="sm" color="success" className="w-24"> Pay </Button>
+                                    </>
+                            
+                                )
+                            }
+
+                            <Button size="sm" className="w-24" variant='ghost'> Detail </Button>
+                        </div>
+
 
                     </div>
 
                 </CardBody>
+
                 </div>
 
             </Card>

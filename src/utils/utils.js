@@ -88,3 +88,8 @@ export const formatDistance = (distance) => {
   
     return "NOT OPEN";
   };
+
+  export const getDayName = (date) => {
+    const options = { weekday: 'long' };
+    return date.toLocaleDateString('en-US', options).toUpperCase();
+  };
