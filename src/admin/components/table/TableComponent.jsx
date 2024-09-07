@@ -316,8 +316,8 @@ export default function TableComponent({
             )}
           </TableHeader>
           <TableBody>
-            {sortedItems.map((item) => (
-              <TableRow key={item.id}>
+            {sortedItems.map((item, index) => (
+              <TableRow key={index}>
                 {headerColumns.map((column) => (
                   <TableCell key={column.uid}>
                     {renderCell(item, column.uid)}

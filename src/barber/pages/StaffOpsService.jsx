@@ -45,6 +45,8 @@ const StaffOpsService = () => {
   const [filtered, setFiltered] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [deletedItem, setDeletedItem] = useState(null);
+  const [updateCount, setUpdateCount] = useState(0);
+  const [processCount, setProcessCount] = useState(0);
 
   console.log(userDetail);
 
@@ -53,6 +55,7 @@ const StaffOpsService = () => {
       refreshUserDetail();
     } else {
       setServices(userDetail.services);
+      setOperationalHours(userDetail.operational_hours);
     }
   }, [userDetail]);
 
@@ -150,6 +153,94 @@ const StaffOpsService = () => {
     }
   };
 
+  // PUT
+  const putHour = async (data) => {
+
+    try {
+      const res = await request(`/barbers/operational-hour/current`, "PUT", data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUpdateCount(updateCount + 1);
+    }
+  };
+
+  // POST
+  const postHour = async (data) => {
+    try {
+      const res = await request(`/barbers/operational-hour/current`, "POST", data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUpdateCount(updateCount + 1);
+    }
+  };
+
+  // DELETE
+  const deleteHour = async (data) => {
+    try {
+      const res = await request(`/barbers/operational-hours/current/${data.operational_hours_id}`, "DELETE");
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUpdateCount(updateCount + 1);
+    }
+  };
+
+  // operational hours
+  const handleUpdateOperationalHours = () => {
+    const updatedData = operationalHours.map(({ barbershop_id, ...rest }) => rest); // Data setelah diedit
+    const initialData = userDetail.operational_hours.map(({ barbershop_id, ...rest }) => rest); // Data awal
+  
+    // Periksa data yang baru (updatedData) dan bandingkan dengan data awal (initialData)
+    updatedData.forEach((hour) => {
+      const existingData = initialData.find((initialHour) => initialHour.day === hour.day);
+  
+      if (!existingData) {
+        // Jika data tidak ada di initialData, maka POST
+        if (!hour.operational_hours_id) {
+          setProcessCount(processCount + 1);
+          postHour(hour);
+        }
+      } else {
+        // Jika data ada, bandingkan untuk PUT
+        if (
+          existingData.opening_time !== hour.opening_time ||
+          existingData.closing_time !== hour.closing_time ||
+          existingData.limit_per_session !== hour.limit_per_session
+        ) {
+          setProcessCount(processCount + 1);
+          putHour(hour);
+        }
+      }
+    });
+  
+    // Periksa data awal (initialData) dan bandingkan dengan data yang baru (updatedData)
+    initialData.forEach((initialHour) => {
+      const currentData = updatedData.find((hour) => hour.day === initialHour.day);
+      if (!currentData) {
+        setProcessCount(processCount + 1);
+        deleteHour(initialHour);
+      }
+    });
+  
+  };
+
+  useEffect(() => {
+    if (updateCount === processCount && processCount > 0) {
+      refreshUserDetail();
+      toast.success("Operational hours updated");
+      setProcessCount(0);
+      setUpdateCount(0);
+    }
+  }, [updateCount]);
+  
+  
+  
+
   return (
     <div className="w-full flex gap-8 py-4 px-4">
       {/* left */}
@@ -176,7 +267,7 @@ const StaffOpsService = () => {
           <h2 className="text-lg font-bold w-full text-left py-1">
             Operational Hours
           </h2>
-          <Button color="primary">Save</Button>
+          <Button color="primary" onClick={handleUpdateOperationalHours}>Save</Button>
         </CardHeader>
         <CardBody className="flex flex-col gap-4">
           <OperationalHoursInput

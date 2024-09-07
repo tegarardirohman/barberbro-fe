@@ -1,16 +1,15 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Checkbox, Input, TimeInput } from '@nextui-org/react';
+import { Checkbox, Input } from '@nextui-org/react';
 
 const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
   const { control } = useForm();
 
   const handleCheckboxChange = (dayValue, isChecked) => {
-
     setOperationalHours((prev) => {
       if (isChecked) {
         const updatedHours = prev.filter((hour) => hour.day !== dayValue);
-        return [...updatedHours, { day: dayValue, opening_time: '', closing_time: '' }];
+        return [...updatedHours, { day: dayValue, opening_time: '', closing_time: '', limit_per_session: 0 }];
       } else {
         return prev.filter((hour) => hour.day !== dayValue);
       }
@@ -18,7 +17,7 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
   };
 
   const handleTimeChange = (day, type, value) => {
-    setOperationalHours((prev) => 
+    setOperationalHours((prev) =>
       prev.map((hour) =>
         hour.day === day ? { ...hour, [type]: value } : hour
       )
@@ -26,6 +25,7 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
   };
 
   const isChecked = (day) => operationalHours.some((hour) => hour.day === day);
+
   const getTimeValue = (day, type) =>
     operationalHours.find((hour) => hour.day === day)?.[type] || '';
 
@@ -33,8 +33,9 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
     <>
       {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(
         (day, index) => (
-          <div key={index} className="flex gap-4 w-full">
+          <div key={index} className="flex gap-4 w-full justify-between">
             <Checkbox
+              isSelected={isChecked(day)}
               checked={isChecked(day)}
               id={day}
               className="flex-1 mr-auto capitalize"
@@ -43,16 +44,15 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
               {day.toLowerCase()}
             </Checkbox>
 
-
             <Controller
               name={`${day}-opening_time`}
-              control={control}s
+              control={control}
               render={({ field }) => (
                 <Input
                   type="time"
                   id={`${day}-opening_time`}
                   label="Open"
-                  className="w-1/3"
+                  className="w-1/4"
                   value={getTimeValue(day, 'opening_time')}
                   onChange={(e) => {
                     field.onChange(e);
@@ -71,7 +71,7 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
                   type="time"
                   id={`${day}-closing_time`}
                   label="Close"
-                  className="w-1/3"
+                  className="w-1/4"
                   value={getTimeValue(day, 'closing_time')}
                   onChange={(e) => {
                     field.onChange(e);
@@ -80,10 +80,26 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
                   disabled={!isChecked(day)}
                 />
               )}
-            /> 
+            />
 
-
-
+            <Controller
+              name={`${day}-limit_per_session`}
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="number"
+                  id={`${day}-limit_per_session`}
+                  label="Limit per Session"
+                  className="w-1/5"
+                  value={getTimeValue(day, 'limit_per_session')}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleTimeChange(day, 'limit_per_session', e.target.value);
+                  }}
+                  disabled={!isChecked(day)}
+                />
+              )}
+            />
           </div>
         )
       )}

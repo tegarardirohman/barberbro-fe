@@ -310,8 +310,6 @@ const FormProfile = () => {
               <h2 className="pb-1 font-semibold">Social Media</h2>
               {socialMedia.map((social, index) => (
                 <div key={index} className="flex flex-row gap-4">
-
-
                   <Controller
                     name={`social_media.${index}.platform_url`}
                     control={control}
