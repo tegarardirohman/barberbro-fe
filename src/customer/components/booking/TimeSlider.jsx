@@ -5,7 +5,12 @@ const getAvailableHours = (openingTime, closingTime) => {
   let currentTime = new Date(`1970-01-01T${openingTime}`);
   const endTime = new Date(`1970-01-01T${closingTime}`);
 
-  while (currentTime < endTime) { // Perhatikan perubahan dari <= menjadi <
+  // Adjust for the same day scenario
+  if (endTime < currentTime) {
+    endTime.setDate(endTime.getDate() + 1);
+  }
+
+  while (currentTime < endTime) {
     availableHours.push(currentTime.toTimeString().slice(0, 5));
     currentTime.setHours(currentTime.getHours() + 1);
   }
@@ -43,7 +48,11 @@ const TimeSlider = ({ operatingHours, day, selectedDate, setSelectedTime }) => {
         ? allAvailable.filter(hour => {
             const [hours, minutes] = hour.split(':').map(Number);
             const hourTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
-            return hourTime > (new Date(now.getTime() + 60 * 60 * 1000)) && hourTime < new Date(`1970-01-01T${closingTime}`);
+
+            // Adjust for closing time
+            const closingDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), ...closingTime.split(':').map(Number));
+
+            return hourTime > (new Date(now.getTime() + 60 * 60 * 1000)) && hourTime < closingDateTime;
           })
         : allAvailable;
 
@@ -51,12 +60,12 @@ const TimeSlider = ({ operatingHours, day, selectedDate, setSelectedTime }) => {
       setAllHours(allAvailable);
       setIsClosed(false);
     } else {
-      setIsClosed(true); // If there's no schedule for the selected day
+      setIsClosed(true);
     }
   }, [operatingHours, day, selectedDate]);
 
   useEffect(() => {
-    setSelectedTime(selectedValue)
+    setSelectedTime(selectedValue);
   }, [selectedValue, setSelectedTime]);
 
   return (
@@ -69,11 +78,14 @@ const TimeSlider = ({ operatingHours, day, selectedDate, setSelectedTime }) => {
           {allHours.map((hour) => (
             <label
               key={hour}
-              className={`flex items-center justify-center w-24 h-12 m-2 rounded-lg cursor-pointer border border-gray-300 ${
-                availableHours.includes(hour) 
-                  ? (selectedValue === hour ? 'bg-slate-700 text-white shadow-lg' : 'bg-white text-gray-700') 
-                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              } transition-colors`}
+              className={`flex items-center justify-center w-24 h-12 m-2 rounded-lg cursor-pointer border border-gray-300 
+                ${
+                  availableHours.includes(hour) 
+                    ? (selectedValue === hour ? 'bg-slate-700 text-white shadow-lg' : 'bg-white text-gray-700') 
+                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  } transition-colors
+              
+              `}
             >
               <input
                 type="radio"

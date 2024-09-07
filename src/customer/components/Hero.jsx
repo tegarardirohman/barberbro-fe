@@ -31,7 +31,7 @@ const Hero = () => {
             <p className="mt-4 mb-12 text-lg">Effortless Scheduling for Barbers, Seamless Booking for Clients</p>
 
             <div className='flex gap-6 justify-center'>
-              <Button className='px-10 py-4 text-black bg-gold font-bold' size='lg' radius='sm' variant='flat'>Book Now </Button>
+              <Button as={Link} to={'/explore'} className='px-10 py-4 text-black bg-gold font-bold' size='lg' radius='sm' variant='flat'>Book Now </Button>
               <Button as={Link} to='/register-barber' className='px-10 py-5 border-gold gold font-bold' size='lg' radius='sm' variant='bordered'>Join Us  </Button>
             </div>
 

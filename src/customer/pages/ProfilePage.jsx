@@ -14,7 +14,7 @@ export const ProfilePage = ({page: Page}) => {
                 <div className="w-80">
                     <SideBarCustomer/>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 px-14 mt-32">
                     <Page/>
                 </div>
             </main>

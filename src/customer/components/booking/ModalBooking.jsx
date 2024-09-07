@@ -6,20 +6,19 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Select,
-  SelectItem,
+  Input,
   useDisclosure,
 } from "@nextui-org/react";
 import TimeSlider from "./TimeSlider.jsx";
 import { useEffect, useState } from "react";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { convertDateToLong, getDayName } from "../../../utils/utils.js";
+import { convertDateToLong, getDayName, rupiah } from "../../../utils/utils.js";
 import useAxios from "../../../hooks/useAxios.jsx";
 import { useAuth } from "../../../context/AuthContext.jsx";
+import { toast } from "react-toastify";
 
 export default function ModalBooking({ data }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDayName, setSelectedDayName] = useState(
     getDayName(new Date())
@@ -29,7 +28,7 @@ export default function ModalBooking({ data }) {
   const [selectedService, setSelectedService] = useState("");
 
   const { response, error: axiosError, loading, request } = useAxios();
-  const {user, logout} = useAuth();
+  const { user, userDetail, refreshUserDetail } = useAuth();
 
   const [requestData, setRequestData] = useState({
     barber_id: "",
@@ -58,98 +57,119 @@ export default function ModalBooking({ data }) {
     }
   };
 
-  const handleServiceChange = (e) => {
-    setSelectedService(e.target.value);
+  const handleServiceChange = (serviceId) => {
+    setSelectedService(serviceId);
   };
 
-  const requestBooking = async(data) => {
-      try {
-        const res = await request("/bookings", "POST", data);
-        console.log(res)
-      } catch (error) {
-        console.log(error);
+  const requestBooking = async (data) => {
+    try {
+      const res = await request("/bookings", "POST", data);
+
+      if (res.statusCode === 201) {
+        toast.success("Booking success, please pay via midtrans");
+
+        window.open(res.data.midtrans_payment_url, "_blank");
+        onOpenChange(false);
       }
-  }
+    } catch (error) {
+      toast.error("Booking failed");
+      console.log(error);
+    }
+  };
 
   const handleSubmit = () => {
     if (!selectedDate || !selectedTime || !selectedService || !data) {
-      console.log("error", selectedDate, selectedTime);
-      setError("Please select a date and time.");
+      setError("Please select a date, time, and service.");
       return;
     }
 
-    console.log(requestData);
-
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
 
     requestBooking(requestData);
   };
 
-  const handleOpen = () => {
-
-    if(user) {
-        onOpen();
-    } else {
-        alert('Please login first!')
-    }
-  };
-
-
   useEffect(() => {
     const newRequestData = {
-        barber_id: data.id,
-        services: [selectedService],
-        booking_date: convertDateToLong(selectedDate),
-        booking_time: selectedTime,
-      };
+      barber_id: data.id,
+      services: [selectedService],
+      booking_date: convertDateToLong(selectedDate),
+      booking_time: selectedTime,
+    };
 
     setRequestData(newRequestData);
   }, [selectedTime, selectedDate, selectedService, data]);
+
+  useEffect(() => {
+    refreshUserDetail();
+  }, []);
 
   return (
     <>
       <Button
         className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-zinc-800 px-8 py-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        onPress={handleOpen}
+        onPress={onOpen}
       >
         Book Now
       </Button>
 
       <Modal
-        size="2xl"
+        size="4xl"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
       >
-        <ModalContent>
-          <ModalHeader className=" flex flex-col gap-1">Booking</ModalHeader>
+        <ModalContent className="p-4">
+          <ModalHeader className="flex flex-col gap-1">Booking</ModalHeader>
           <ModalBody>
-            <p>Please complete the form below!</p>
+            <p>Please select service</p>
 
-            <Select
-              size="md"
-              label="Select Services"
-              placeholder="Select Services"
-              labelPlacement="outside"
-              isRequired
-              selectedKeys={[selectedService]}
-              onChange={handleServiceChange}
-            >
+            <div className="flex flex-wrap gap-4 w-full py-4">
               {data.services?.map((service) => (
-                <SelectItem key={service.service_id}>
-                  {service.service_name}
-                </SelectItem>
+                <label
+                  key={service.service_id}
+                  className={`flex items-center justify-between border rounded-lg p-4 cursor-pointer
+        ${
+          selectedService === service.service_id
+            ? "bg-slate-800 shadow-sm text-slate-100"
+            : "border-gray-300"
+        }
+      `}
+                  onClick={() => handleServiceChange(service.service_id)}
+                >
+                  <div className="flex flex-col items-center">
+                    <input
+                      type="radio"
+                      name="service"
+                      value={service.service_id}
+                      checked={selectedService === service.service_id}
+                      onChange={() => handleServiceChange(service.service_id)}
+                      className="sr-only"
+                    />
+
+                    <span className="text-sm font-medium block">
+                      {service.service_name}
+                    </span>
+                    <span className="font-bold text-sm">{`${rupiah(
+                      service.price
+                    )}`}</span>
+                  </div>
+                </label>
               ))}
-            </Select>
+            </div>
 
             <DatePicker
               onChange={handleDateChange}
               minValue={today(getLocalTimeZone())}
-              size="md"
+              size="lg"
               label="Booking Date"
               labelPlacement="outside"
               description="Select booking date"
               isRequired
+              className="py-3"
             />
 
             <TimeSlider
@@ -159,14 +179,15 @@ export default function ModalBooking({ data }) {
               setSelectedTime={setSelectedTime}
             />
           </ModalBody>
+
           <ModalFooter>
             <Button color="danger" variant="light" onPress={onOpenChange}>
               Close
             </Button>
             <Button
-              color="primary"
               type="submit"
-              onPress={() => handleSubmit()}
+              onPress={handleSubmit}
+              className="bg-slate-800 text-white"
             >
               Submit
             </Button>

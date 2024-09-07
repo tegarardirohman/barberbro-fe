@@ -12,8 +12,7 @@ export default function BarbershopProfilePage() {
     const { response, error, loading, request } = useAxios();
     const [data, setData] = useState({});
     const [reviews, setReviews] = useState([]);
-
-    useDocumentTitle('Profile Page')
+    useDocumentTitle(`Barberbro - ${data.name}`);
     
     const fetchData = async () => {
         try {

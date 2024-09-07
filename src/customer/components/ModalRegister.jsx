@@ -8,6 +8,7 @@ import useAxios from "../../hooks/useAxios";
 import { useAuth } from "../../context/AuthContext";
 import logoGold from "../../assets/images/logo-gold.png";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const registerSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -45,6 +46,7 @@ export default function ModalRegister({ props, position }) {
       console.log("res", res);
 
       if (res === "success") {
+        toast.success("Register successful");
         onClose();
       } else {
         form.setError("email", { type: "manual", message: error?.message || "Register failed" });

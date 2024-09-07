@@ -56,11 +56,11 @@ const TransactionItem = ({ data }) => {
                                 </tr>
                                 <tr>
                                     <td className='font-medium'>Date</td>
-                                    <td className='pl-4'> { convertLongToDate(item.bookingDate) } </td>
+                                    <td className='pl-4'> { convertLongToDate(item.booking_date) } </td>
                                 </tr>
                                 <tr>
                                     <td className='font-medium'>Time</td>
-                                    <td className='pl-4'> { item.bookingTime } </td>
+                                    <td className='pl-4'> { item.booking_time } </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -85,7 +85,7 @@ const TransactionItem = ({ data }) => {
                             }
                             <TableRow>
                                 <TableCell>Total</TableCell>
-                                <TableCell className='font-bold'> {rupiah(item.totalPrice)} </TableCell>
+                                <TableCell className='font-bold'> {rupiah(item.total_price)} </TableCell>
                             </TableRow>
 
                         </TableBody>

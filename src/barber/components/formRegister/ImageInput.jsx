@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import axios or use fetch if you prefer
 import useAxios from '../../../hooks/useAxios';
 
-export default function ImageInput() {
+export default function ImageInput({ imageUrl }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -62,11 +62,12 @@ export default function ImageInput() {
     <div className="flex flex-col items-center">
       <label
         htmlFor="imageInput"
-        className="w-40 h-40 flex items-center justify-center border-2 border-dashed rounded cursor-pointer"
+        className="w-40 h-40 aspect-square object-cover flex items-center justify-center border-2 rounded-full cursor-pointer"
         style={{
-          backgroundImage: imagePreview ? `url(${imagePreview})` : 'none',
+          backgroundImage: imagePreview ? `url(${imagePreview})` : (imageUrl? `url(${imageUrl})` : 'none'),
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         {!imagePreview && <span>Select Image</span>}

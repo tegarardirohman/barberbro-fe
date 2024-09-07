@@ -3,8 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 're
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import { Button, Input } from '@nextui-org/react';
+import useAxios from '../../../hooks/useAxios';
 
-export default function MapWithSearch({ address, setAddress }) {
+export default function MapWithSearch({ address, setAddress, setValue }) {
   const [manualMarker, setManualMarker] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState(null);
@@ -20,12 +21,34 @@ export default function MapWithSearch({ address, setAddress }) {
           addressdetails: 1,
         },
       });
+
       setAddress(response.data);
     } catch (error) {
       console.error('Error fetching address details:', error);
       setAddress(null);
     }
   };
+
+  const { request } = useAxios();
+
+  // Function to fetch ZIP code
+  const fetchZipCode = async (lat, long) => {
+    try {
+      const res = await request(
+        `https://kodepos.vercel.app/detect/?latitude=${lat}&longitude=${long}`
+      );
+
+      setValue("postal_zip_code", res?.data?.code?.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (manualMarker) {
+      fetchZipCode(manualMarker.lat, manualMarker.lng);
+    }
+  }, [manualMarker, searchResult, address]);
 
   // Function to handle map click events
   const handleMapClick = async (e) => {

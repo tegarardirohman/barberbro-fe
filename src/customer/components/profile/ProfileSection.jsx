@@ -5,8 +5,9 @@ import useAxios from "../../../hooks/useAxios";
 import useDocumentTitle from "../../../hooks/useDocumentTitle";
 import { convertDateToLong } from "../../../utils/utils";
 import { useAuth } from "../../../context/AuthContext";
+import { toast } from "react-toastify";
 
-export default function ProfileSection() {
+export default function ProfileSection({ handleEdit }) {
     useDocumentTitle('Barberbro - Profile')
 
     const { user } = useAuth();
@@ -58,15 +59,25 @@ export default function ProfileSection() {
 
             const res = await request('/customers/current', 'PUT', formattedData);
 
-            // console.log(res)
+            if(res.statusCode === 200) {
+
+                if(handleEdit) {
+                    handleEdit(true);
+                }
+
+                toast.success('Profile updated successfully');
+            }
 
         } catch (error) {
+            if(handleEdit) {
+                handleEdit(false);
+            }
             console.log(error);
         }
     };
 
     return (
-        <section className="px-14 mt-32">
+        <section>
             {/* <p className="text-zinc-600 text-md font-bold my-4">Profile Picture</p> */}
             <form onSubmit={handleSubmit(onSubmit)}>
                 {/* <div className="flex flex-row items-center gap-x-4">

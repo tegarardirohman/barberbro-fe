@@ -18,6 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { FaEyeLowVision, FaLockOpen } from "react-icons/fa6";
 import logoBlack from "../../assets/images/logo-black.png";
+import { toast } from "react-toastify";
 
 export default function ModalLogin({ props, position }) {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -46,7 +47,7 @@ export default function ModalLogin({ props, position }) {
       const res = await login(data.email, data.password, data.remember);
 
       if(res === "success") {
-        alert("Login successful");
+        toast.success("Login successful");
         onClose();
       } else {
         form.setError("email", { type: "manual", message: res || "Login failed" });

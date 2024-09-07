@@ -8,6 +8,12 @@ import Carousel from "./Carousel.jsx";
 import useAxios from "../../../hooks/useAxios.jsx";
 import GoogleMapsEmbed from "../googleMap/GoogleMapsEmbed.jsx";
 import GoogleMapsLink from "../googleMap/GoogleMapsLink.jsx";
+import { Card } from "@nextui-org/react";
+import ProfileItem from "../../../barber/components/profile/ProfileItem.jsx";
+import { PiAt, PiCityDuotone, PiPhoneDuotone } from "react-icons/pi";
+import { FaInstagram } from "react-icons/fa6";
+import { IoLogoTiktok } from "react-icons/io5";
+import { MdFacebook } from "react-icons/md";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -196,7 +202,7 @@ export default function BarbershopOverview({ data }) {
 
             <div className="mt-10">
               {/* Sizes */}
-              <div className="mt-10">
+              {/* <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">
                     List of Services
@@ -259,37 +265,99 @@ export default function BarbershopOverview({ data }) {
                     ))}
                   </RadioGroup>
                 </fieldset>
+              </div> */}
+
+
+              {/* Operational Hour */}
+              <div className="w-full">
+
+                {
+                  data?.operational_hours?.map((hour) => (
+                    <div className="w-full flex justify-between items-center gap-2 mb-2">
+
+                      <h3 className="text-sm font-light">
+                        {hour.day}
+                      </h3>
+                      <p className="text-sm font-medium text-gray-900">
+                        {hour.opening_time} - {hour.closing_time}
+                      </p>
+
+                    </div>
+                  ))
+                }
+
+
+
               </div>
+
+              
               <div>
                 <ModalBooking data={data} />
               </div>
             </div>
           </div>
 
-          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
-            {/* Description and details */}
-            <div>
-              <h3 className="sr-only">Description</h3>
+          <div className="pt-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
 
-              <div className="space-y-6">
-                <p className="text-base text-gray-900">{data.description}</p>
-              </div>
-            </div>
+            {/* Services */}
+            <div className="w-full mt-2 pb-6 mb-4 border-b-2">
+              <h2 className="text-md font-medium text-gray-900">Services</h2>
 
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">
-                Operational Hours
-              </h2>
-
-              <div className="mt-4 space-y-6">
-                {data?.operational_hours?.map((day, index) => (
-                  <p key={index} className="text-sm text-gray-600 font-bold">
-                    {" "}
-                    {day.day} | {day.opening_time} - {day.closing_time}
-                  </p>
+              <div className="mt-4 flex w-full gap-2">
+                {data?.services?.map((service) => (
+                  <Card key={service.service_id} className="text-sm p-4 font-bold border-1" radius="sm" shadow="none">
+                    {service.service_name}
+                  </Card> 
                 ))}
               </div>
             </div>
+
+
+            {/* Description and details */}
+            <div>
+              <div className="space-y-6">
+              <div className="text-base text-gray-900" dangerouslySetInnerHTML={{ __html: data?.description }} />
+              </div>
+            </div>
+
+
+
+            {/* Detail */}
+            <div className="mt-10 border-t-2 py-4">
+              <h2 className="text-md font-medium text-gray-900 mb-2">
+                More
+              </h2>
+
+              <div className="w-full flex justify-between">
+
+                <ProfileItem icon={<PiPhoneDuotone size={24} className='text-slate-600' />} name="Phone" value={data?.contact_number} />
+                <ProfileItem icon={<PiAt size={24} className='text-slate-600' />} name="Email" value={data?.email} />
+
+              </div>
+
+              <ProfileItem icon={<PiCityDuotone size={24} className='text-slate-600' />} name="City" value={data?.city} />
+            </div>
+
+
+            {/* Socmed */}
+            <div className="mt-4 border-t-2 py-4">
+              <h2 className="text-md font-medium text-gray-900">
+                Social Media
+              </h2>
+
+              <div className="w-full flex justify-between">
+
+              <div className="w-full flex flex-col justify-between mt-4 gap-4">
+                <ProfileItem icon={<FaInstagram size={24} className='text-orange-600' />} name="Instagram" value={<a href={data?.social_media?.[1]?.platform_url} target="_blank">{data?.social_media?.[1]?.platform_url}</a> || " - "} />
+                <ProfileItem icon={<IoLogoTiktok size={24} className='text-slate-900' />} name="Tiktok" value={<a href={data?.social_media?.[2]?.platform_url} target="_blank">{data?.social_media?.[2]?.platform_url}</a> || " - "} />
+                <ProfileItem icon={<MdFacebook size={24} className='text-blue-600' />} name="Facebook" value={<a href={data?.social_media?.[0]?.platform_url} target="_blank">{data?.social_media?.[0]?.platform_url}</a> || " - "} />
+              </div>
+
+              </div>
+            </div>
+
+
+
           </div>
         </div>
       </div>

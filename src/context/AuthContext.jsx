@@ -6,15 +6,13 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [error, setError] = useState(null); 
+    const [error, setError] = useState(null);
     const { response, error: axiosError, loading, request } = useAxios();
     const [userDetail, setUserDetail] = useState({});
     
-    
     const navigate = useNavigate();
 
-
-    // fetch user details
+    // Fetch user details based on role
     const fetchUserDetail = async (role) => {
         try {
             const res = await request(`/${role}/current`);
@@ -22,19 +20,20 @@ export function AuthProvider({ children }) {
             return res.data;
         } catch (error) {
             console.log(error);
-            return null; 
+            return null;
         }
     };
     
+    // Refresh user details
     const refreshUserDetail = async () => {
         let detail = null;
-    
+
         if (user?.role.includes('CUSTOMER')) {
             detail = await fetchUserDetail('customers');
         } else if (user?.role.includes('STAFF')) {
             detail = await fetchUserDetail('barbers');
         }
-    
+
         return detail;
     };
 
@@ -44,7 +43,6 @@ export function AuthProvider({ children }) {
             const res = await request('/login', 'POST', { email, password });
 
             if (res.statusCode === 201) {
-
                 const userData = {
                     id: res.data.userId,
                     email: res.data.email,
@@ -60,14 +58,12 @@ export function AuthProvider({ children }) {
                     sessionStorage.setItem('user', JSON.stringify(userData));
                 }
 
-
                 // Navigate based on role
                 if (userData.role.includes('ADMIN')) {
                     navigate('/admin/');
                 } else if (userData.role.includes('CUSTOMER')) {
                     fetchUserDetail('customers');
                     navigate('/');
-
                 } else if (userData.role.includes('STAFF')) {
                     fetchUserDetail('barbers');
                     navigate('/staff');
@@ -81,7 +77,7 @@ export function AuthProvider({ children }) {
         } catch (err) {
             setError(err.message || 'Login failed');
             console.log("login failed", err);
-        } 
+        }
     };
 
     // Handle Registration
@@ -90,7 +86,6 @@ export function AuthProvider({ children }) {
             const res = await request('/customer/register', 'POST', { email, password, role: "CUSTOMER" });
 
             if (res.statusCode === 201) {
-                alert("Registration successful");
                 navigate('/');
                 return "success";
             } else {
@@ -100,7 +95,7 @@ export function AuthProvider({ children }) {
         } catch (err) {
             setError(err.message || 'Registration failed');
             console.log("registration failed", err);
-        } 
+        }
     };
 
     // Handle Logout
@@ -117,21 +112,31 @@ export function AuthProvider({ children }) {
         const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
         if (storedUser) {
             try {
-                setUser(JSON.parse(storedUser));
+                const parsedUser = JSON.parse(storedUser);
+                setUser(parsedUser);
+                console.log("User set after refresh:", parsedUser);
             } catch (error) {
+                console.log("Error parsing stored user", error);
                 localStorage.removeItem('user');
                 sessionStorage.removeItem('user');
             }
         }
     }, []);
 
+    useEffect(() => {
+        if (user){
+            refreshUserDetail();
+        }
+    }, [user])
+
     return (
-        <AuthContext.Provider value={{ user, userDetail, refreshUserDetail , error, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ user, userDetail, refreshUserDetail, error, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
 }
 
+// Custom hook for accessing AuthContext
 export function useAuth() {
     return useContext(AuthContext);
 }

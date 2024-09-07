@@ -68,11 +68,17 @@ export const formatDistance = (distance) => {
     
     // Mencari jam operasional yang sesuai dengan hari ini
     const todayHours = operationalHours.find(hours => hours.day === todayDay);
-    const currentTime = today.getHours() + ":" + today.getMinutes();
+    const currentHours = today.getHours().toString().padStart(2, '0');
+    const currentMinutes = today.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${currentHours}:${currentMinutes}`;
     
     // Jika barbershop buka hari ini dan saat ini berada dalam jam operasional
-    if (todayHours && currentTime >= todayHours.opening_time && currentTime <= todayHours.closing_time) {
-      return `OPEN - Closed at ${todayHours.closing_time}.`;
+    if (todayHours) {
+      if (currentTime >= todayHours.opening_time && currentTime <= todayHours.closing_time) {
+        return `OPEN - Closed at ${todayHours.closing_time}.`;
+      } else if (currentTime < todayHours.opening_time) {
+        return `CLOSED - Opens at ${todayHours.opening_time}.`;
+      }
     }
   
     // Jika barbershop tutup, cari hari selanjutnya kapan buka
@@ -82,12 +88,13 @@ export const formatDistance = (distance) => {
       
       const nextDayHours = operationalHours.find(hours => hours.day === nextDay);
       if (nextDayHours) {
-        return `CLOSED - Open at ${nextDay}, ${nextDayHours.opening_time}`;
+        return `CLOSED - Opens at ${nextDay}, ${nextDayHours.opening_time}`;
       }
     }
   
     return "NOT OPEN";
   };
+  
 
   export const getDayName = (date) => {
     const options = { weekday: 'long' };

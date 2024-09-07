@@ -425,8 +425,6 @@ const TransactionPage = () => {
 
       useEffect(() => {
         fetchData();
-        // setTransactions(response_data.data);
-        // console.log(response_data.data);
       }, [])
 
 
@@ -452,10 +450,7 @@ const TransactionPage = () => {
       
         setFilteredData(sorted);
       }, [status, transactions]);
-      
-      
 
-      console.log(status)
 
       
   return (
