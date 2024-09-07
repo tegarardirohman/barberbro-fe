@@ -269,8 +269,8 @@ export default function TableComponent({
             {onAdd && (
               <Button
                 onClick={onAdd}
-                variant="outline"
-                color="primary"
+                variant="bordered"
+                color="default"
                 size="md"
               >
                 Add

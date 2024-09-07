@@ -1,156 +1,82 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import useAxios from '../../hooks/useAxios';
+import { useAuth } from '../../context/AuthContext';
+import ModalInputGallery from '../components/gallery/ModalInputGallery';
+import { getImageUrl } from '../../utils/utils';
 
 const StaffGallery = () => {
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageToEdit, setImageToEdit] = useState(null);
+  const { response, error, loading, request } = useAxios();
+  const { userDetail, refreshUserDetail } = useAuth();
 
-
-
-  const {response, error, loading, request} = useAxios();
+  const fetchImages = async (id) => {
+    try {
+      const response = await request(`/barbers/${id}/gallery-images`);
+      console.log(response)
+      setImages(response.data);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  };
 
   useEffect(() => {
-    // Ambil data gambar dari API
-    const fetchImages = async () => {
-      try {
-        const response = await request('/gallery-image');
-        console.log(response)
-        // setImages(response.data);
-      } catch (error) {
-        console.error('Error fetching images:', error);
-      }
-    };
 
-    fetchImages();
-  }, []);
-
-  const handleImageUpload = async (event) => {
-    event.preventDefault();
-    
-    const formData = new FormData();
-    formData.append('image', selectedImage);
-    
-    try {
-      const response = await fetch('/gallery-image', {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log(response);
-
-      setImages(response.data);
-      setSelectedImage(null);
-    } catch (error) {
-      console.error('Error uploading image:', error);
+    if (userDetail) {
+      fetchImages(userDetail.id);
+    } else {
+      refreshUserDetail();
     }
-  };
-
-  const handleImageEdit = async (imageId) => {
-    // Ambil data gambar untuk diedit
-    const image = images.find(img => img.id === imageId);
-    setImageToEdit(image);
-  };
-
-  const handleImageUpdate = async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-    if (selectedImage) {
-      formData.append('image', selectedImage);
-    }
-    
-    try {
-      await axios.patch(`/gallery-image/${imageToEdit.id}`, formData, { 
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      
-      // Refresh gambar setelah update
-      const response = await axios.get('/api/images');
-      setImages(response.data);
-      setImageToEdit(null);
-      setSelectedImage(null);
-    } catch (error) {
-      console.error('Error updating image:', error);
-    }
-  };
+  }, [userDetail]);
 
   const handleImageDelete = async (imageId) => {
     try {
-      await axios.delete(`/gallery-image/${imageId}`);
+      const res = await request(`/gallery-image/${imageId}`, 'DELETE');
       
-      // Refresh gambar setelah delete
-      const response = await axios.get('/api/images');
-      setImages(response.data);
+      if (res.statusCode === 200) {
+        setImages(images.filter((img) => img.image_id !== imageId));
+
+        toast.success('Image deleted successfully');
+      }
+
     } catch (error) {
       console.error('Error deleting image:', error);
     }
   };
 
-  return (
-    <div className='w-full px-4'>
-      <h2 className='text-xl font-semibold mb-4'>Staff Gallery</h2>
+  const onRefresh = () => {
+    setTimeout(() => {
+      if (userDetail) {
+        fetchImages(userDetail.id);
+      } else {
+        refreshUserDetail();
+      }
+    }, 1500);
+  };
 
-      <div className='mb-6'>
-        <form onSubmit={handleImageUpload}>
-          <input
-            type='file'
-            accept='image/*'
-            onChange={(e) => setSelectedImage(e.target.files[0])}
-            className='mb-4'
-          />
-          <button
-            type='submit'
-            disabled={!selectedImage}
-            className='px-4 py-2 bg-blue-500 text-white rounded'
-          >
-            Upload Image
-          </button>
-        </form>
+  return (
+    <div className="w-full px-8 mt-4">
+      <div className="w-full flex justify-between mb-4">
+        <h2 className="text-xl font-semibold mb-4">Staff Gallery Image</h2>
+        <ModalInputGallery onRefresh={onRefresh} />
       </div>
 
-      {imageToEdit && (
-        <div className='mb-6'>
-          <h3 className='text-lg font-semibold mb-2'>Edit Image</h3>
-          <form onSubmit={handleImageUpdate}>
-            <input
-              type='file'
-              accept='image/*'
-              onChange={(e) => setSelectedImage(e.target.files[0])}
-              className='mb-4'
-            />
-            <button
-              type='submit'
-              disabled={!selectedImage && !imageToEdit}
-              className='px-4 py-2 bg-green-500 text-white rounded'
-            >
-              Update Image
-            </button>
-          </form>
-        </div>
-      )}
-
-      <div className='grid grid-cols-3 gap-4'>
-        {images.map((image) => (
-          <div key={image.id} className='relative w-full h-40 bg-gray-200'>
+      <div className="grid grid-cols-4 gap-4">
+        {images.length > 0 && images.map((image) => (
+          <div
+            key={image.image_id}
+            className="relative group w-full h-60 bg-gray-200 overflow-hidden"
+          >
             <img
-              src={image.url}
-              alt={image.description}
-              className='w-full h-full object-cover'
+              src={getImageUrl(image.path)}
+              alt={image.name}
+              className="h-full w-full object-cover object-center"
             />
-            <div className='absolute top-0 right-0 p-2'>
+            <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
-                onClick={() => handleImageEdit(image.id)}
-                className='bg-yellow-500 text-white px-2 py-1 rounded mr-2'
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleImageDelete(image.id)}
-                className='bg-red-500 text-white px-2 py-1 rounded'
+                onClick={() => handleImageDelete(image.image_id)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
               >
                 Delete
               </button>

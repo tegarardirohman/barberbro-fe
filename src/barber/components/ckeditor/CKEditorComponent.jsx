@@ -79,7 +79,12 @@ export default function CKEditorComponent({ data, setValue }) {
 				'outdent',
 				'indent'
 			],
-			shouldNotGroupWhenFull: false
+			shouldNotGroupWhenFull: true,
+		},
+		ui: {
+			viewportOffset: {
+				top: 50,
+			}
 		},
 		plugins: [
 			AccessibilityHelp,

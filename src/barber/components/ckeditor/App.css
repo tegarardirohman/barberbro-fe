@@ -20,8 +20,9 @@
 }
 
 .editor-container_inline-editor .editor-container__editor {
-	min-width: 690px;
-	max-width: 690px;
+	/* min-width: 690px;
+	max-width: 690px; */
+	width: 820px;
 }
 
 .ck-dropdown {
@@ -31,3 +32,42 @@
   .ck-balloon-panel {
     z-index: 9999 !important;
   }
+
+  .ck.ck-editor__main .ck-dropdown {
+    z-index: 9999; /* Pastikan ini lebih tinggi dari modal */
+}
+
+.ck input.ck-input.ck-input-text {
+    box-shadow: var(--ck-inner-shadow),0 0;
+    background: var(--ck-color-input-background);
+    border: 1px solid var(--ck-color-input-border);
+    padding: var(--ck-spacing-extra-tiny) var(--ck-spacing-medium);
+    transition-property: box-shadow,border;
+    transition: .2s ease-in-out;
+
+    height: inherit;
+    width: inherit;
+    font-size: inherit;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.ck input.ck-input.ck-input-text:focus {
+    border: var(--ck-focus-ring);
+    box-shadow: var(--ck-focus-outer-shadow),var(--ck-inner-shadow);
+}
+
+.ck.ck-content ul,
+.ck.ck-content ul li {
+  list-style-type: inherit;
+}
+
+.ck.ck-content ul {
+  /* Default user agent style sheet. You can change it to your needs. */
+  padding-left: 40px;
+}
+
+:root {
+    --ck-z-default: 100;
+    --ck-z-panel: calc( var(--ck-z-default) + 999 );
+}

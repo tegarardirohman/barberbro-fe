@@ -7,6 +7,7 @@ import { convertLongToDate } from "../../../utils/utils";
 export default function ModalBarberDetail({ data, control, errors, onSubmit, setValue }) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
+
   return (
     <>
       <Button onPress={onOpen} color="default" variant="bordered" size="sm" className='w-24 p-4 absolute top-8 right-8'>Edit</Button>
@@ -15,8 +16,9 @@ export default function ModalBarberDetail({ data, control, errors, onSubmit, set
         isDismissable={false}
         onOpenChange={onOpenChange}
         placement="top-center"
-        size="3xl"
-        className="min-h-[30rem] z-[1050]"
+        size="4xl"
+        className="min-h-[30rem] z-[10]"
+        portalContainer={document.body}
       >
         <ModalContent>
           {(onClose) => (
@@ -62,8 +64,10 @@ export default function ModalBarberDetail({ data, control, errors, onSubmit, set
                 />
               </div>
 
-                  <h4 className="text-lg font-semibold">Description</h4>
-                <CKEditorComponent data={data} setValue={setValue} />
+                <h4 className="text-lg font-semibold">Description</h4>
+                <div className="w-full">
+                  <CKEditorComponent data={data} setValue={setValue} />
+                </div>
 
               </ModalBody>
               <ModalFooter className="justify-between px-8 py-4">
