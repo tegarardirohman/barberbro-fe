@@ -107,9 +107,11 @@ const StaffProfile = () => {
     const data = getValues();
 
     try {
-      await request("/barbers/current", "PUT", data);
-      if (response) {
+      const res = await request("/barbers/current", "PUT", data);
+
+      if (res.statusCode === 200) {
         toast.success("Profile successfully updated");
+        refreshUserDetail();
       }
     } catch (error) {
       console.log(error);

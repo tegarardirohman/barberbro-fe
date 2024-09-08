@@ -74,7 +74,10 @@ export default function ModalBarberDetail({ data, control, errors, onSubmit, set
                 <Button color="danger" variant="flat" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button onPress={onSubmit} className="w-24 bg-slate-900 text-white">
+                <Button onPress={() => {
+                  onSubmit();
+                  onClose();
+                }} className="w-24 bg-slate-900 text-white">
                   Save
                 </Button>
               </ModalFooter>
