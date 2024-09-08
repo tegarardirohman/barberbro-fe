@@ -244,7 +244,7 @@ const StaffOpsService = () => {
   return (
     <div className="w-full flex gap-8 py-4 px-4">
       {/* left */}
-      <Card className="w-full p-4">
+      <Card className="w-full p-4 border-1" shadow="none">
         <div className="w-full flex justify-between">
           <h2 className="text-md font-bold">Services</h2>
         </div>
@@ -262,7 +262,7 @@ const StaffOpsService = () => {
 
       {/* right */}
 
-      <Card className="w-full p-4">
+      <Card className="w-full p-4 border-1" shadow="none">
         <CardHeader className="border-b-1 flex w-full justify-between">
           <h2 className="text-lg font-bold w-full text-left py-1">
             Operational Hours

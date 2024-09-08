@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
                     navigate('/admin/');
                 } else if (userData.role.includes('CUSTOMER')) {
                     fetchUserDetail('customers');
-                    navigate('/');
+                    // navigate('/');
                 } else if (userData.role.includes('STAFF')) {
                     fetchUserDetail('barbers');
                     navigate('/staff');
@@ -72,7 +72,7 @@ export function AuthProvider({ children }) {
                 return "success";
 
             } else {
-                return res?.message;
+                return res?.data.message;
             }
         } catch (err) {
             setError(err.message || 'Login failed');
