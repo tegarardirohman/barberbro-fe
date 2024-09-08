@@ -3,7 +3,7 @@ import React from 'react'
 import { convertLongToDate, getImageUrl, rupiah } from '../../../utils/utils'
 import { Link } from 'react-router-dom'
 
-const TransactionItem = ({ data }) => {
+const TransactionItem = ({ data, handleDetails }) => {
 
     const getStatus = (status) => {
         switch(status.toLowerCase()) {
@@ -27,7 +27,7 @@ const TransactionItem = ({ data }) => {
     <>
         {data.map((item, index) => (
 
-            <Card key={index} className='p-4 mb-6 flex flex-row border-1' shadow='none' radius='none'>
+            <Card key={index} className='p-4 mb-6 flex flex-row border-1 hover:shadow-lg transition-shadow hover:scale-105' shadow='none' radius='lg' isPressable onPress={() => handleDetails(item)}>
 
                 
                 <Link to={"/barbershop/" + item.barber.id} className='h-full w-1/4 aspect-square bg-red-300 rounded-md'>
@@ -90,22 +90,6 @@ const TransactionItem = ({ data }) => {
 
                         </TableBody>
                         </Table>
-
-                        <div className="flex justify-end gap-4">
-
-                            {
-                                item.status.toLowerCase() === "pending" && (
-                                    <>
-                                        <Button size="sm" color="danger" className="w-24"> Cancel </Button>
-                                        <Button size="sm" color="success" className="w-24"> Pay </Button>
-                                    </>
-                            
-                                )
-                            }
-
-                            <Button size="sm" className="w-24" variant='ghost'> Detail </Button>
-                        </div>
-
 
                     </div>
 

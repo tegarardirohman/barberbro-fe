@@ -124,12 +124,11 @@ export default function ModalBooking({ data }) {
   };
 
   const handleOpenModal = () => {
-
     if (!user) {
       toast.error("Please login first");
       return;
     }
-    
+
     onOpen();
   };
 
@@ -150,13 +149,14 @@ export default function ModalBooking({ data }) {
         isKeyboardDismissDisabled={true}
       >
         <ModalContent className="p-4">
-
           {profileComplete && (
             <ModalHeader className="flex flex-col gap-1">Booking</ModalHeader>
           )}
           <ModalBody>
             {!profileComplete ? (
-              <ProfileSection handleEdit={(status) => setProfileComplete(status)} />
+              <ProfileSection
+                handleEdit={(status) => setProfileComplete(status)}
+              />
             ) : (
               <>
                 <p>Please select service</p>
@@ -166,12 +166,12 @@ export default function ModalBooking({ data }) {
                     <label
                       key={service.service_id}
                       className={`flex items-center justify-between border rounded-lg p-4 cursor-pointer
-${
-  selectedService === service.service_id
-    ? "bg-slate-800 shadow-sm text-slate-100"
-    : "border-gray-300"
-}
-`}
+                      ${
+                        selectedService === service.service_id
+                          ? "bg-slate-800 shadow-sm text-slate-100"
+                          : "border-gray-300"
+                      }
+                      `}
                       onClick={() => handleServiceChange(service.service_id)}
                     >
                       <div className="flex flex-col items-center">

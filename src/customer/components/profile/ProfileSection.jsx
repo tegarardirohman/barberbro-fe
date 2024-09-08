@@ -108,9 +108,12 @@ export default function ProfileSection({ handleEdit }) {
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    size="sm"
+                                    size="lg"
                                     type="text"
                                     label="First name"
+                                    placeholder="Input your first name"
+                                    required
+                                    labelPlacement="outside"
                                 />
                             )}
                         />
@@ -120,9 +123,12 @@ export default function ProfileSection({ handleEdit }) {
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    size="sm"
+                                    size="lg"
                                     type="text"
                                     label="Surname"
+                                    placeholder="Input your surname"
+                                    labelPlacement="outside"
+                                    required
                                 />
                             )}
                         />
@@ -133,9 +139,12 @@ export default function ProfileSection({ handleEdit }) {
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                size="sm"
+                                size="lg"
                                 type="text"
                                 label="Phone number"
+                                placeholder="Input your phone number"
+                                labelPlacement="outside"
+                                required
                             />
                         )}
                     />
@@ -145,9 +154,11 @@ export default function ProfileSection({ handleEdit }) {
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                size="sm"
+                                size="lg"
                                 type="text"
                                 label="Address"
+                                placeholder="Input your address"
+                                labelPlacement="outside"
                             />
                         )}
                     />
@@ -159,7 +170,7 @@ export default function ProfileSection({ handleEdit }) {
                                 <Select
                                     {...field}
                                     label="Gender"
-                                    value={field.value}
+                                    value={[field.value]}
                                     selectedKeys={(field.value === "true" || field.value === true) ? ["true"] : ["false"]}
                                 >
                                     <SelectItem key={"true"} value={"true"}>Male</SelectItem>
