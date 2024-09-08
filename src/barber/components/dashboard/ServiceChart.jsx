@@ -3,10 +3,10 @@ import ReactECharts from 'echarts-for-react';
 
 
 
-const ServiceChart = ({ data }) => {
+const ServiceChart = ({ title, data }) => {
   const option = {
     title: {
-      text: 'Service Distribution',
+      text: title || 'Service Distribution',
       left: 'center',
     },
     tooltip: {

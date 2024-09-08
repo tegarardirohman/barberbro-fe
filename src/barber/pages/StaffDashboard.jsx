@@ -92,51 +92,6 @@ const StaffDashboard = () => {
   }, []);
 
 
-  const option = {
-    title: {
-      text: 'Monthly Transactions',
-    },
-    tooltip: {},
-    legend: {
-      data: ['Hair Cut'],
-    },
-    grid: {
-      left: '1%',
-      right: '0%',
-      bottom: '0%',
-      top: '16%',
-      containLabel: true,
-    },  
-    xAxis: {
-      type: 'category',
-      data: statitic1.months,
-      axisLabel: {
-        fontSize: 12,
-      },
-    },
-    yAxis: {
-      type: 'value',
-      axisLabel: {
-        fontSize: 12,
-      },
-    },
-    series: [
-      {
-        name: 'Transaction',
-        type: 'bar',
-        data: statitic1.count,
-        lineStyle: {
-          width: 2,
-        },
-      //   areaStyle: {},
-        smooth: true,
-        itemStyle: {
-          color: '#6C5DD3',
-        },
-      },
-    ],
-  };
-
   useEffect(() => {
 
     console.log(statitic2)
@@ -148,7 +103,7 @@ const StaffDashboard = () => {
       <Stats />
       <div className="flex w-full mt-8 gap-4">
         <Card className='flex-1 p-8'>
-          <TransactionChart option={option} />
+          <TransactionChart title={'Transaction Chart'} label={statitic1.months} value={statitic1.count} />
         </Card>
         <div className="w-1/3 pl-2">
           <Card className='w-full p-4 mb-4'>

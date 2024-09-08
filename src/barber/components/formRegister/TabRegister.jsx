@@ -23,6 +23,7 @@ import MapInput from "./MapInput";
 import OperationalHoursInput from "./OperationalHoursInput";
 import useAxios from "../../../hooks/useAxios";
 import FormResults from "./FormResults";
+import { toast } from "react-toastify";
 
 export default function MultiStepForm() {
   const [operationalHours, setOperationalHours] = useState([]);
@@ -106,7 +107,8 @@ export default function MultiStepForm() {
 
       if (response) {
         console.log(response);
-        alert("Registration successful");
+
+        toast.success("Registration successful");
 
         navigate('/')
       }

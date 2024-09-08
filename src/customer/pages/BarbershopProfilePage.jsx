@@ -27,6 +27,7 @@ export default function BarbershopProfilePage() {
         try {
             const res = await request(`/reviews/${id}`);
             setReviews(res.data);
+            console.log(res)
         } catch (error) {
             console.log(error);
         }
@@ -34,7 +35,7 @@ export default function BarbershopProfilePage() {
 
     useEffect(() => {
         fetchData();
-        // fetchReviews();
+        fetchReviews();
     }, [])
 
 
@@ -44,7 +45,7 @@ export default function BarbershopProfilePage() {
 
             <main className="mx-20 mt-36">
                 <BarbershopOverview data={data}/>
-                <ReviewsRating/>
+                <ReviewsRating data={reviews}/>
             </main>
         </>
 
