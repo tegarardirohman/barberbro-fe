@@ -9,7 +9,7 @@ const SlotScheduler = ({ data, handleModal }) => {
   return (
     <Card className='w-full py-1 px-4 border-1' shadow='none'>
         <CardHeader className='border-b-1'>
-            <h2 className="text-lg font-bold w-full text-center py-2"> { data.bookingTime } - { addOneHour(data.bookingTime) } </h2>
+            <h2 className="text-lg font-bold w-full text-center py-2"> { data.booking_time } - { addOneHour(data.booking_time) } </h2>
         </CardHeader>
         <CardBody>
             <h3 className='font-bold pb-2'>Booking: </h3>

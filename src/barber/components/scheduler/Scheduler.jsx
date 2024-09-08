@@ -20,7 +20,7 @@ const getStartOfWeek = (date) => {
   return start;
 };
 
-const Scheduler = ({ setDate }) => {
+const Scheduler = ({ setDate, selectedDate, setSelectedDate, datas }) => {
   const [currentWeekStart, setCurrentWeekStart] = useState(getStartOfWeek(new Date()));
   const weekDates = getWeekDates(currentWeekStart);
   const today = new Date().toDateString();
@@ -43,7 +43,16 @@ const Scheduler = ({ setDate }) => {
 
   const handleClick = (day) => {
     setDate(day)
+    setSelectedDate(day)
     // alert(`Clicked on ${day}`);
+  };
+
+  const getTrxCount = (date) => {
+    const trx = datas.filter(data => {
+      const trxDate = new Date(data.booking_date);
+      return trxDate.toDateString() === date.toDateString();
+    });
+    return trx.length;
   };
 
   return (
@@ -61,14 +70,17 @@ const Scheduler = ({ setDate }) => {
       <div className="flex flex-wrap gap-4">
 
         {weekDates.map((date, index) => (
+
           <ButtonCalendar
             key={index}
             day={date.toLocaleDateString('en-US', { weekday: 'long' })}
             day_number={date.getDate()}
-            trx="10"
+            trx={getTrxCount(date) || 0}
             handleClick={() => handleClick(date)}
-            isToday={date.toDateString() === today}
+            isToday={date.toDateString() === selectedDate.toDateString()}
+            setSelectedDate={setSelectedDate}
           />
+
         ))}
 
       </div>

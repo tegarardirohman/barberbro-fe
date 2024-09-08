@@ -22,12 +22,13 @@ const StaffTransaction = () => {
   };
 
   const getTodayLong = () => {
-    return convertToLong(new Date()); // Get today's date in long format
+    return convertToLong(new Date());
   };
 
   const [datas, setDatas] = useState([]);
   const [groupedData, setGroupedData] = useState([]);
   const [date, setDate] = useState(getTodayLong());
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   // useAxios
   const { response, error, loading, request } = useAxios();
@@ -37,6 +38,7 @@ const StaffTransaction = () => {
     try {
       const res = await request(`/bookings/current`);
 
+      console.log(res)
       setDatas(res.data);
     } catch (error) {
       console.log(error);
@@ -50,17 +52,17 @@ const StaffTransaction = () => {
 
   useEffect(() => {
     // Filter and group data based on the selected date
-    const filteredData = datas.filter((data) => data.bookingDate === date);
+    const filteredData = datas.filter((data) =>  data.booking_date === date);
 
     const grouped = Object.values(
       filteredData.reduce((acc, data) => {
-        if (!acc[data.bookingTime]) {
-          acc[data.bookingTime] = {
-            bookingTime: data.bookingTime,
+        if (!acc[data.booking_time]) {
+          acc[data.booking_time] = {
+            booking_time: data.booking_time,
             bookings: [],
           };
         }
-        acc[data.bookingTime].bookings.push(data);
+        acc[data.booking_time].bookings.push(data);
         return acc;
       }, {})
     );
@@ -69,6 +71,7 @@ const StaffTransaction = () => {
   }, [date, datas]);
 
   const handleDateChange = (newDate) => {
+    
     console.log(convertDateToLong(newDate));
     setDate(convertToLong(newDate));
   };
@@ -107,6 +110,7 @@ const StaffTransaction = () => {
 
     alert('confirm booking ' + booking_id);
   };
+
 
   return (
     <>
@@ -148,15 +152,15 @@ const StaffTransaction = () => {
                       </tr>
                       <tr>
                         <td>Time</td>
-                        <td>{modalData.bookingTime + " - " + addOneHour(modalData.bookingTime)}</td>
+                        <td>{modalData.booking_time + " - " + modalData.booking_time}</td>
                       </tr>
                       <tr>
                         <td>Date</td>
-                        <td>{convertLongToDate(modalData.bookingDate)}</td>
+                        <td>{convertLongToDate(modalData.booking_date)}</td>
                       </tr>
                       <tr>
                         <td>Total Price</td>
-                        <td className="font-bold">{ rupiah(modalData.totalPrice) }</td>
+                        <td className="font-bold">{ rupiah(modalData.total_price) }</td>
                       </tr>
                     </tbody>
                   </table>
@@ -196,7 +200,7 @@ const StaffTransaction = () => {
       <div className="flex px-4 w-full">
         <div className="w-full py-4 px-4 flex flex-col gap-4" shadow="none">
           <Card className="w-full py-4 px-4">
-            <Scheduler setDate={handleDateChange} />
+            <Scheduler setDate={handleDateChange} selectedDate={selectedDate} setSelectedDate={setSelectedDate} datas={datas} />
           </Card>
 
           <Card className="w-full max-w-full py-4 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
