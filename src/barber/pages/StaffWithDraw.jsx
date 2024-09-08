@@ -1,10 +1,28 @@
 import { Button, Card, Input } from '@nextui-org/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import BankCards from '../components/withdraw/BankCards'
 import { PiHandWithdrawFill, PiHandWithdrawLight } from 'react-icons/pi'
 import { FaChevronCircleDown } from 'react-icons/fa'
+import { useAuth } from '../../context/AuthContext'
+import { rupiah } from '../../utils/utils'
 
 const StaffWithDraw = () => {
+    const [userData, setUserData] = useState(null);
+
+    const {user, userDetail, refreshUserDetail} = useAuth();
+
+
+    useEffect(() => {
+
+        if(userDetail) {
+            setUserData(userDetail)
+        } else {
+            refreshUserDetail()
+        }
+    }, [userDetail])
+
+
+
   return (
     <div className='flex gap-4 px-4 py-4 w-full'>
 
@@ -16,9 +34,9 @@ const StaffWithDraw = () => {
 
             <Card shadow='none' className='w-full px-4 py-4 border-1 mt-4'>
 
-                <Card className='px-8 py-6 border-1 bg-gold mb-7 relative'>
+                <Card className='px-8 py-8 border-1 bg-gold mb-7 relative' shadow='none'>
                     <h2 className='font-light'>Balance</h2>
-                    <p className='text-4xl font-bold'>Rp. 100.000</p>
+                    <p className='text-3xl font-bold w-full text-center'>{ rupiah(userData?.balance) }</p>
                 </Card>
 
                 <Input
@@ -29,6 +47,7 @@ const StaffWithDraw = () => {
                     labelPlacement='outside'
                     labelPlaceholder="Amount"
                     className='w-full mt-8'
+                    max={userData?.balance}
                 />
 
                 <p className='text-sm pt-20 pr-8'>Ready to claim your earnings? Click the button below to withdraw your funds.</p>

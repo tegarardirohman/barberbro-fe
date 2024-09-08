@@ -50,7 +50,7 @@ const Scheduler = ({ setDate, selectedDate, setSelectedDate, datas }) => {
   const getTrxCount = (date) => {
     const trx = datas.filter(data => {
       const trxDate = new Date(data.booking_date);
-      return trxDate.toDateString() === date.toDateString();
+      return trxDate.toDateString() === date.toDateString() && data.status !== 'Canceled';
     });
     return trx.length;
   };

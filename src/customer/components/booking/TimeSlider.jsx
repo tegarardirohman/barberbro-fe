@@ -24,7 +24,6 @@ const TimeSlider = ({ operatingHours, day, selectedDate, setSelectedTime }) => {
   const [allHours, setAllHours] = useState([]);
   const [isClosed, setIsClosed] = useState(false);
 
-
   useEffect(() => {
     if (!operatingHours || operatingHours.length === 0) {
       setIsClosed(true);

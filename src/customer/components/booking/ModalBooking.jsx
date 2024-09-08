@@ -65,7 +65,7 @@ export default function ModalBooking({ data }) {
 
   const requestBooking = async (data) => {
     try {
-      const res = await request("/bookings", "POST", data);
+      const res = await request("/bookings", "POST", requestData);
 
       if (res.statusCode === 201) {
         toast.success("Booking success, please pay via midtrans");
@@ -91,13 +91,14 @@ export default function ModalBooking({ data }) {
       toast.error("Please login first");
       return;
     }
+    console.log(requestData);
 
     requestBooking(requestData);
   };
 
   const handleProfileSubmit = () => {
     setProfileComplete(true);
-    refreshUserDetail(); // Refresh user detail to reflect any changes
+    refreshUserDetail(); 
   };
 
   useEffect(() => {
@@ -120,7 +121,7 @@ export default function ModalBooking({ data }) {
   }, [user, userDetail]);
 
   const checkUserDetail = () => {
-    return userDetail.firstName && userDetail.phone;
+    return userDetail.firstName && userDetail.phone && userDetail.address;
   };
 
   const handleOpenModal = () => {
@@ -224,7 +225,7 @@ export default function ModalBooking({ data }) {
             </Button>
             {profileComplete && (
               <Button
-                type="submit"
+                onPress={handleSubmit}
                 className="bg-slate-800 text-white"
                 disabled
               >

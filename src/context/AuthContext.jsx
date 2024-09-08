@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
                     navigate('/admin/');
                 } else if (userData.role.includes('CUSTOMER')) {
                     fetchUserDetail('customers');
-                    // navigate('/');
+                    navigate('/');
                 } else if (userData.role.includes('STAFF')) {
                     fetchUserDetail('barbers');
                     navigate('/staff');

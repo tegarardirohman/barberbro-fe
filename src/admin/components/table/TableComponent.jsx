@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {
   Table,
@@ -23,10 +23,9 @@ import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { capitalize } from "./utils";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
+// Helper function to access nested values
+const getNestedValue = (obj, key) => {
+  return key.split('.').reduce((acc, part) => acc && acc[part], obj);
 };
 
 export default function TableComponent({
@@ -38,6 +37,7 @@ export default function TableComponent({
   onDelete,
   onAdd,
   statusOptions = [],
+  statusColorMap = {},
   statusFilterDefault = "all",
 }) {
   const [filterValue, setFilterValue] = React.useState("");
@@ -62,6 +62,7 @@ export default function TableComponent({
   }, [visibleColumns, columns]);
 
   const filteredItems = React.useMemo(() => {
+    console.log("Current Status Filter:", statusFilter); // Debugging line
     let filteredData = [...(data || [])];
 
     if (hasSearchFilter) {
@@ -92,8 +93,8 @@ export default function TableComponent({
 
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+      const first = getNestedValue(a, sortDescriptor.column);
+      const second = getNestedValue(b, sortDescriptor.column);
       const cmp = first < second ? -1 : first > second ? 1 : 0;
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
@@ -101,7 +102,13 @@ export default function TableComponent({
 
   const renderCell = React.useCallback(
     (item, columnKey) => {
-      const cellValue = item[columnKey];
+      const cellValue = getNestedValue(item, columnKey);
+
+      if (Array.isArray(cellValue) && columnKey === "services") {
+        return cellValue.length > 0 && cellValue[0].service_name
+          ? cellValue[0].service_name
+          : "No data";
+      }
 
       switch (columnKey) {
         case "status":
@@ -125,8 +132,7 @@ export default function TableComponent({
                   onClick={() => onView(item)}
                   className="bg-slate-900 text-white"
                 >
-                  {" "}
-                  View{" "}
+                  View
                 </Button>
               )}
 
@@ -334,7 +340,6 @@ export default function TableComponent({
             onChange={(newPage) => setPage(newPage)}
             color="primary"
             showControls
-            // Removed showPageNumbers
           />
           <label className="flex items-center text-default-400 text-small">
             Rows per page:

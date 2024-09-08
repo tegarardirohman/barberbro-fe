@@ -13,7 +13,9 @@ import {
 } from "@nextui-org/react";
 import { addOneHour, convertDateToLong, convertLongToDate, rupiah } from "../../utils/utils";
 import useAxios from "../../hooks/useAxios";
-import { FaFaceDizzy } from "react-icons/fa6";
+import { FaFaceDizzy, FaHashtag, FaInstagram } from "react-icons/fa6";
+import ProfileItem from "../components/profile/ProfileItem";
+import { toast } from "react-toastify";
 
 const StaffTransaction = () => {
   const convertToLong = (dateString) => {
@@ -52,8 +54,10 @@ const StaffTransaction = () => {
 
   useEffect(() => {
     // Filter and group data based on the selected date
-    const filteredData = datas.filter((data) =>  data.booking_date === date);
-
+    const filteredData = datas.filter(
+      (data) => data.booking_date === date && data.status !== "Canceled"
+    );
+  
     const grouped = Object.values(
       filteredData.reduce((acc, data) => {
         if (!acc[data.booking_time]) {
@@ -66,7 +70,14 @@ const StaffTransaction = () => {
         return acc;
       }, {})
     );
-
+  
+    // Sort the grouped data by booking_time
+    grouped.sort((a, b) => {
+      const timeA = a.booking_time;
+      const timeB = b.booking_time;
+      return timeA.localeCompare(timeB);
+    });
+  
     setGroupedData(grouped);
   }, [date, datas]);
 
@@ -77,7 +88,7 @@ const StaffTransaction = () => {
   };
 
   // modal
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [modalData, setModalData] = useState({});
 
@@ -91,7 +102,13 @@ const StaffTransaction = () => {
 
     try {
       const res = await request(`/bookings/${booking_id}/cancel`, "PUT");
-      console.log(res);
+      
+      if (res.statusCode === 200) {
+        toast.success('booking ' + booking_id + ' canceled');
+        fetchData();
+        onClose();
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -102,13 +119,17 @@ const StaffTransaction = () => {
   const handleCompleted = async (booking_id) => {
 
     try {
-      const res = await request(`/bookings/${booking_id}/completed`, "PUT");
-      console.log(res);
+      const res = await request(`/bookings/${booking_id}/complete`, "PUT");
+
+
+      if (res.statusCode === 200) {
+        toast.success('booking ' + booking_id + ' completed');
+        fetchData();
+        onClose();
+      }
     } catch (error) {
       console.log(error);
     }
-
-    alert('confirm booking ' + booking_id);
   };
 
 
@@ -116,20 +137,19 @@ const StaffTransaction = () => {
     <>
       {/* modal */}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
-        <ModalContent className="w-full p-4">
+        <ModalContent className="w-full py-4 px-8">
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col">
                 Booking Data
               </ModalHeader>
               <ModalBody className="w-full">
-                <Card className="p-4 border-1" shadow="none">
-                  <table>
-                    <tbody className="w-full">
-                      <tr>
-                        <td> Booking ID</td>
-                        <td>{modalData.booking_id}</td>
-                      </tr>
+                <Card className="" shadow="none">
+
+                <ProfileItem icon={<FaHashtag size={24} className='text-slate-400' />} name="Booking ID" value={modalData.booking_id} />
+
+                  <table className="w-full border-spacing-y-2">
+                    <tbody className="w-full space-y-4">
                       <tr>
                         <td>Name</td>
                         <td>
@@ -161,6 +181,10 @@ const StaffTransaction = () => {
                       <tr>
                         <td>Total Price</td>
                         <td className="font-bold">{ rupiah(modalData.total_price) }</td>
+                      </tr>
+                      <tr>
+                        <td>Status</td>
+                        <td className="font-bold">{ modalData.status }</td>
                       </tr>
                     </tbody>
                   </table>

@@ -7,6 +7,7 @@ import { TbClockHour10 } from "react-icons/tb";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import { useAuth } from "../../../context/AuthContext";
+import { SiDatabricks } from "react-icons/si";
 
 const Sidebar = () => {
   const { userDetail } = useAuth();
@@ -58,6 +59,21 @@ const Sidebar = () => {
               >
                 <GrTransaction size={22} className="mr-2" />
                 Transaction
+              </Button>
+            </NavbarItem>
+
+            <NavbarItem className="w-full px-0">
+              <Button
+                as={Link}
+                to="/staff/all-transaction/"
+                aria-current="page"
+                className={`w-full text-start justify-start font-semibold ${
+                  isActive("/staff/all-transaction/") ? "bg-slate-900 text-slate-100" : "bg-white"
+                }`}
+                variant="light"
+              >
+                <SiDatabricks size={22} className="mr-2" />
+                All Transaction
               </Button>
             </NavbarItem>
 

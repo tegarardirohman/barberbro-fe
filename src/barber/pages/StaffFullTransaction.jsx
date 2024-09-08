@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../context/AuthContext';
+import useAxios from '../../hooks/useAxios';
+import TableComponent from '../../admin/components/table/TableComponent';
 import { convertDateToLong, convertLongToDate, rupiah } from '../../utils/utils';
 import { Table, Button, Card, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from '@nextui-org/react';
+import ProfileItem from '../components/profile/ProfileItem';
 import { FaHashtag } from 'react-icons/fa6';
-import useAxios from '../../hooks/useAxios';
-import TableComponent from '../components/table/TableComponent';
-import { useAuth } from '../../context/AuthContext';
+import ModalViewTransaction from '../components/transaction/ModalViewTransaction';
 
-const AdminTransaction = () => {
+const StaffFullTransaction = () => {
 
     const {user, userDetail, refreshUserDetail} = useAuth();
     const {response, error, loading, request} = useAxios();
@@ -19,12 +21,11 @@ const AdminTransaction = () => {
 
     const columns = [
         { uid: "booking_id", name: "#", sortable: true },
-        { uid: "barber.name", name: "Barber Name", sortable: false },
-        { uid: "barber.city", name: "Barber Location", sortable: false },
         { uid: "customer.firstName", name: "Customer Name", sortable: false },
         { uid: "customer.surname", name: "LastName", sortable: false },
         { uid: "customer.email", name: "Customer Email", sortable: false },
         { uid: "customer.phone", name: "Customer Phone", sortable: false },
+        { uid: "customer.is_male", name: "isMale", sortable: false },
         { uid: "booking_date", name: "Booking Date", sortable: true },
         { uid: "booking_time", name: "Booking Time", sortable: true },
         { uid: "services", name: "Service Name", sortable: false },
@@ -35,9 +36,9 @@ const AdminTransaction = () => {
 
       const statusColorMap = {
         Pending: "warning", 
-        Settlement: "primary",
+        Settlement: "success",
         Canceled: "danger",
-        Completed: "success"
+        Completed: "warning"
       };
 
       const statusOptions = [
@@ -47,13 +48,13 @@ const AdminTransaction = () => {
         { uid: 'Completed', name: 'Completed' }
       ];
     
-      const INITIAL_VISIBLE_COLUMNS = ["barber.name", "barber.city","customer.firstName", "customer.surname", "booking_date", "booking_time", "services", "total_price", "status", "actions"];
+      const INITIAL_VISIBLE_COLUMNS = ["customer.firstName", "customer.surname", "booking_date", "booking_time", "services", "total_price", "status", "actions"];
 
 
     // get table data
     const fetchTableData = async () => {
         try {
-            const res = await request(`/bookings`);
+            const res = await request(`/bookings/current`);
 
             const transformedData = res.data.map(item => ({
                 ...item,
@@ -84,7 +85,7 @@ const AdminTransaction = () => {
 
   return (
     <div className='px-8'>
-        <h2 className='text-xl font-bold mb-4'>Transactions Data</h2>
+        <h2 className='text-xl font-bold mb-4'>Staff Full Transaction</h2>
 
         <TableComponent
             data={tableData}
@@ -198,4 +199,4 @@ const AdminTransaction = () => {
   )
 }
 
-export default AdminTransaction
+export default StaffFullTransaction

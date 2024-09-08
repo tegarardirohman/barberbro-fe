@@ -28,6 +28,7 @@ import { MdOutlineAlternateEmail } from "react-icons/md";
 import { IoMdPin } from "react-icons/io";
 import { PiCityLight } from "react-icons/pi";
 import { TbZip } from "react-icons/tb";
+import { getImageUrl } from "../../utils/utils";
 
 const AdminBarber = () => {
   useDocumentTitle("Admin - Barbershop Data");
@@ -70,7 +71,7 @@ const AdminBarber = () => {
     barbershop_profile_picture_path: data?.barbershop_profile_picture_id?.path ? (
       <img
         src={
-          "http://10.10.102.48:8080" + data?.barbershop_profile_picture_id?.path
+          getImageUrl(data?.barbershop_profile_picture_id?.path)
         }
         alt="Barbershop Profile"
         className="w-12 aspect-square object-cover rounded-md"
@@ -145,8 +146,8 @@ const AdminBarber = () => {
                     <div className="flex w-full gap-4">
                       <Image
                         src={
-                          "http://10.10.102.48:8080" +
-                          selected?.barbershop_profile_picture_id.path
+                          getImageUrl(selected?.barbershop_profile_picture_id.path)
+                          
                         }
                         alt="Barbershop Profile"
                         className="w-40 aspect-square object-cover rounded-lg"
@@ -156,10 +157,8 @@ const AdminBarber = () => {
                           {" "}
                           {selected?.name}{" "}
                         </h1>
-                        <p className="font-light text-sm">
-                          {" "}
-                          {selected?.description}{" "}
-                        </p>
+
+                        <div dangerouslySetInnerHTML={{ __html: selected?.description }}></div>
                       </div>
                     </div>
 
@@ -197,7 +196,7 @@ const AdminBarber = () => {
                       name={selected?.name}
                     />
 
-                    <Card className="py-4 w-full" shadow="none">
+                    <Card className="pt-4 w-full" shadow="none">
                       <h2 className="text-sm font-bold mb-0">Services</h2>
 
                       <Table aria-label="Example static collection table" shadow="none" radius="sm" className="-ml-4 pl-0">

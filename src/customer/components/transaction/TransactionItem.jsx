@@ -11,10 +11,12 @@ const TransactionItem = ({ data, handleDetails }) => {
                 return <Chip color="warning"> Pending </Chip>
             case "settlement":
                 return <Chip color="primary"> Settlement </Chip>
-            case "cancelled":
+            case "canceled":
                 return <Chip color="danger"> Cancelled </Chip>
+            case "completed":
+                return <Chip color="success"> Completed </Chip>
             default:
-                return <Chip color="success"> {status} </Chip>
+                return <Chip color="secondary"> {status} </Chip>
         }
     }
 
