@@ -1,6 +1,8 @@
 import {StarIcon} from "@heroicons/react/20/solid/index.js";
 import { useEffect, useState } from "react";
 import { Rating } from "react-simple-star-rating";
+import { convertLongToDate } from "../../../utils/utils";
+import { Avatar } from "@nextui-org/react";
 
 const posts = [
     {
@@ -212,24 +214,31 @@ export default function ReviewsRating({ data }) {
                     {data.length > 0 && data.map((review) => (
                         <article key={review.id} className="flex max-w-xl flex-col items-start justify-between">
                             <div className="flex items-center gap-x-4 text-xs">
-                                <time dateTime={review.createAt} className="text-gray-500">
-                                    {review.createAt}
+                                <time dateTime={review.createdAt} className="text-gray-500">
+                                    {convertLongToDate(review.createdAt)}
                                 </time>
-                                {/* <a
-                                    href={post.category.href}
-                                    className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
-                                >
-                                    {post.category.title}
-                                </a> */}
+
+                                {
+                                    review?.services?.map((post, index) => (
+                                        <a 
+                                            key={index}
+                                            className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
+                                        >
+                                            {post}
+                                        </a>
+                                        
+                                    ))
+                                }
 
                             </div>
                             <div className="group relative">
-                                {/* <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                                    <a href={"ss"}>
+                                <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                                    <a className="flex items-center gap-2  text-sm">
+                                    <Avatar size="sm" name={review.customer_name} />
                                         <span className="absolute inset-0"/>
-                                        {post.title}
+                                        {review.customer_name}
                                     </a>
-                                </h3> */}
+                                </h3>
                                 <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{review.comment}</p>
                             </div>
                             {/* Reviews */}
@@ -242,23 +251,8 @@ export default function ReviewsRating({ data }) {
                                     <p className="sr-only">{review.rating} out of 5 stars</p>
                                 </div>
                             </div>
-                            {/* <div className="relative mt-8 flex items-center gap-x-4">
-                                <img alt="" src={post.author.imageUrl} className="h-10 w-10 rounded-full bg-gray-50"/>
-                                <div className="text-sm leading-6">
-                                    <p className="font-semibold text-gray-900">
-                                        <a href={post.author.href}>
-                                            <span className="absolute inset-0"/>
-                                            {post.author.name}
-                                        </a>
-                                    </p>
-                                    <p className="text-gray-600">{post.author.role}</p>
-                                </div>
-                            </div> */}
                         </article>
                     ))}
-
-
-
                 </div>
             </div>
         </div>

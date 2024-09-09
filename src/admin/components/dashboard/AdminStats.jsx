@@ -14,6 +14,21 @@ const AdminStats = () => {
   const {userDetail} = useAuth()
   const { request } = useAxios();
   const [transaction, setTransaction] = useState([])
+  const [withdrawl, setWithdrawl] = useState([])
+
+
+
+
+  const fetchWithdrawl = async () => {
+    try {
+      const res = await request('/withdrawals')
+      setWithdrawl(res.data)
+
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   const fetchData = async () => {
@@ -28,16 +43,19 @@ const AdminStats = () => {
   useEffect(() => {
     setDetail(userDetail)
     fetchData()
+    fetchWithdrawl()
   }, [userDetail])
+
+
 
   // get total transaction
   const getTotalTransaction = () => {
     let total = 0
     transaction.forEach(item => {
-
       if (item.status.toLoweCase() !== 'canceled')
       total += item.total_price
     })
+
     return total
   }
 
@@ -56,10 +74,17 @@ const AdminStats = () => {
 
     let total = 0
     transaction.forEach(item => {
-        if((item.status === 'Settlement') || (item.status === 'Completed')) {
+        if((item.status === 'Completed')) {
             total += item.total_price
         }
     })
+
+    withdrawl.forEach(item => {
+      if (item.status == 'APPROVED') {
+        total -= item.withdrawal_amount
+      }
+    })
+
     return total
   }
 

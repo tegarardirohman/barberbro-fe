@@ -10,6 +10,7 @@ export default function MapWithSearch({ address, setAddress, setValue }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState(null);
 
+
   // Function to fetch address details based on lat and lng
   const fetchAddress = async (lat, lng) => {
     try {
@@ -121,6 +122,7 @@ export default function MapWithSearch({ address, setAddress, setValue }) {
     });
     return null;
   };
+
 
   return (
     <div>

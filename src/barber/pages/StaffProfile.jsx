@@ -92,6 +92,7 @@ const StaffProfile = () => {
       const res = await request("/barbers/current");
       console.log(res.data);
       setData(res.data);
+      setSocialMedia(res.data.social_media);
     } catch (error) {
       console.log(error);
     }
@@ -225,7 +226,7 @@ const StaffProfile = () => {
                 Edit
               </Button>
 
-              <ModalBarberSocmed control={control} errors={errors} onSubmit={onSubmit} setValue={setValue} />
+              <ModalBarberSocmed socialMedia={socialMedia} control={control} errors={errors} onSubmit={onSubmit} setValue={setValue} />
 
             </div>
 

@@ -23,7 +23,7 @@ export default function RecommendationCard({ limit = 0 }) {
         setDatas(result.data.slice(0, limit));
       } else {
         setDatas(result.data);
-        setPageCount(Math.ceil(result.data.length / itemsPerPage)); // Hitung total halaman
+        setPageCount(Math.ceil(result.data.length / itemsPerPage));
       }
     } catch (error) {
       console.log(error);

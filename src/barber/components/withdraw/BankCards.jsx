@@ -1,20 +1,22 @@
 import { Input, Select, SelectItem, Spacer } from '@nextui-org/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
-const BankCards = () => {
+const BankCards = ({ setBankData }) => {
   const [state, setState] = useState({
     number: '',
     expiry: '',
     cvc: '',
     name: '',
     focus: '',
+    bank: ''
   });
+
+  const [bank, setBank] = useState("");
 
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
-    
     setState((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -22,9 +24,20 @@ const BankCards = () => {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   }
 
-//   bank
+  useEffect(() => {
+    setBankData(state)
+  }, [state])
 
-  const banks = ["BRI", "BNI", "OCBC", "Mandiri"];
+  useEffect(() => {
+    setState((prev) => ({ ...prev, bank: bank }));
+  }, [bank])
+
+  const handleSelectionChange = (e) => {
+    setBank(e.target.value);
+  }
+
+//   bank
+  const banks = ["BCA", "BRI", "BNI", "OCBC", "Mandiri"];
 
   return (
     <div className='w-full justify-start items-start gap-4'>
@@ -42,8 +55,8 @@ const BankCards = () => {
         <Input
           type="number"
           name="number"
-          placeholder="Card Number"
-          label="Card Number"
+          placeholder="Account Number"
+          label="Account Number"
           labelPlacement='outside'
           value={state.number}
           onChange={handleInputChange}
@@ -68,12 +81,12 @@ const BankCards = () => {
                 label="Bank Name"
                 placeholder="Select Bank"
                 labelPlacement='outside'
-                // disabledKeys={}
                 className="max-w-xs"
+                onChange={handleSelectionChange}
                 >
                 
                 {banks.map((bank, index) => (
-                    <SelectItem key={index}>
+                    <SelectItem key={bank}>
                     {bank}
                     </SelectItem>
                 ))}

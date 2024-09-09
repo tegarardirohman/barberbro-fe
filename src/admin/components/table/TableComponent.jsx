@@ -225,8 +225,11 @@ export default function TableComponent({
                   setStatusFilter(Array.from(keys)[0] || "all")
                 }
               >
+                <DropdownItem key="all" className="capitalize" onPress={() => setStatusFilter("all")}>
+                  All
+                </DropdownItem>
                 {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
+                  <DropdownItem key={status.uid} className="capitalize" onPress={() => setStatusFilter(status.uid)}>
                     {capitalize(status.name)}
                   </DropdownItem>
                 ))}

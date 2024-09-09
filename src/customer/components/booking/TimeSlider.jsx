@@ -6,6 +6,11 @@ const TimeSlider = ({ availableBookingTime, selectedDate, setSelectedTime }) => 
   const [allHours, setAllHours] = useState([]);
 
   useEffect(() => {
+
+    if (!availableBookingTime.available_time || availableBookingTime.available_time.length === 0) {
+      return;
+    }
+
     const now = new Date();
     const currentDate = now.toDateString(); // Get current date in string format
     const selectedDateObject = new Date(selectedDate).toDateString();

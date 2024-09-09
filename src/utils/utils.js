@@ -34,7 +34,13 @@ export const rupiah = (number) => {
 }
 
 export const getImageUrl = (url) => {
-    return import.meta.env.VITE_IMAGE_URL + url;
+
+    if (url === "/assets/images/barbershop/default.jpg") {
+      return import.meta.env.VITE_IMAGE_URL + url;
+    } else {
+      return url;
+    }
+
 }
 
 export const formatDistance = (distance) => {

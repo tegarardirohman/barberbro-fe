@@ -20,7 +20,7 @@ export default function ProfileSection({ title = "Edit your profile info", handl
             surname: "",
             phone: "",
             address: "",
-            about: "",
+            // about: "",
             is_male: true, // Default value
             date_of_birth: new Date().toISOString().split('T')[0], // Default to current date in yyyy-MM-dd format
         },
@@ -37,8 +37,8 @@ export default function ProfileSection({ title = "Edit your profile info", handl
                 surname: res.data.surname || "",
                 phone: res.data.phone || "",
                 address: res.data.address || "",
-                about: res.data.about || "",
-                is_male: res.data.is_male !== undefined ? res.data.is_male : true, // Ensure a boolean value
+                // about: res.data.about || "",
+                is_male: res.data.is_male !== undefined ? res.data.is_male : true, 
                 date_of_birth: res.data.date_of_birth ? new Date(res.data.date_of_birth).toISOString().split('T')[0] : new Date().toISOString().split('T')[0], // Format to yyyy-MM-dd
             });
         } catch (error) {
@@ -52,11 +52,11 @@ export default function ProfileSection({ title = "Edit your profile info", handl
 
     const onSubmit = async (data) => {
         try {
-            // Convert the 'is_male' value from boolean to string for submission if necessary
+           
             const formattedData = {
                 ...data,
                 is_male: (data.is_male === "true"),
-                date_of_birth: convertDateToLong(data.date_of_birth), // If needed
+                date_of_birth: convertDateToLong(data.date_of_birth),
             };
 
             const res = await request('/customers/current', 'PUT', formattedData);
@@ -200,6 +200,7 @@ export default function ProfileSection({ title = "Edit your profile info", handl
                         />
                     </div>
                     {/* <Controller
+                        className="hidden"
                         name="about"
                         control={control}
                         render={({ field }) => (
