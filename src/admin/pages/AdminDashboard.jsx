@@ -7,6 +7,7 @@ import { Rating } from 'react-simple-star-rating';
 import { format, getMonth, getYear, getDay } from 'date-fns';
 import useAxios from '../../hooks/useAxios';
 import AdminStats from '../components/dashboard/AdminStats';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 // Fungsi untuk mendapatkan nama bulan
 const getMonthName = (monthIndex) => {
@@ -99,6 +100,8 @@ const AdminDashboard = () => {
   // get barber location
   const [barberLocation, setBarberLocation] = useState([]);
   const [trxByGender, setTrxByGender] = useState([]);
+
+  useDocumentTitle('Admin Dashboard');
 
 
 

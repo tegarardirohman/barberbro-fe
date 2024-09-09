@@ -23,8 +23,11 @@ const TransactionPage = () => {
       const fetchData = async () => {
         try {
           const res = await request('/bookings/current');
+
+          const sorted = res.data.sort((a, b) => new Date(a.booking_date) - new Date(b.booking_date));
+
           console.log(res)
-          setTransactions(res.data);
+          setTransactions(sorted);
         } catch (error) {
           console.log(error);
         }

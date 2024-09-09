@@ -17,8 +17,8 @@ const HomePage = () => {
             {/* <SearchBar /> */}
             <LogoClouds/>
             <Statistics/>
-            <NearbyBarber />
-            <RecommendationCard/>
+            <NearbyBarber limit={8} />
+            <RecommendationCard limit={8} />
             <FooterPage/>
         </>
     )

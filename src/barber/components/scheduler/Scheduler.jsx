@@ -52,6 +52,7 @@ const Scheduler = ({ setDate, selectedDate, setSelectedDate, datas }) => {
       const trxDate = new Date(data.booking_date);
       return trxDate.toDateString() === date.toDateString() && data.status !== 'Canceled';
     });
+
     return trx.length;
   };
 

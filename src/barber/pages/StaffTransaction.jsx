@@ -11,7 +11,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-import { addOneHour, convertDateToLong, convertLongToDate, rupiah } from "../../utils/utils";
+import { addOneHour, compareLongDates, convertDateToLong, convertLongToDate, rupiah } from "../../utils/utils";
 import useAxios from "../../hooks/useAxios";
 import { FaFaceDizzy, FaHashtag, FaInstagram } from "react-icons/fa6";
 import ProfileItem from "../components/profile/ProfileItem";
@@ -24,7 +24,7 @@ const StaffTransaction = () => {
   };
 
   const getTodayLong = () => {
-    return convertToLong(new Date());
+    return convertDateToLong(new Date());
   };
 
   const [datas, setDatas] = useState([]);
@@ -54,9 +54,18 @@ const StaffTransaction = () => {
 
   useEffect(() => {
     // Filter and group data based on the selected date
+    // const filteredData = datas.filter(
+    //   (data) => data.booking_date === date && data.status !== "Canceled"
+    // );
+
     const filteredData = datas.filter(
-      (data) => data.booking_date === date && data.status !== "Canceled"
+      (data) => compareLongDates(data.booking_date, date) && data.status !== "Canceled"
     );
+
+    console.log("datas", datas);
+    console.log("filteredData", filteredData);
+    console.log("now", date);
+    console.log("now real", convertDateToLong(new Date()));
   
     const grouped = Object.values(
       filteredData.reduce((acc, data) => {
@@ -208,12 +217,24 @@ const StaffTransaction = () => {
 
               </ModalBody>
               <ModalFooter className="flex justify-between py-8">
-                <Button color="danger" variant="flat" onPress={() => handleCancel(modalData.booking_id)}>
-                  Cancel Booking
-                </Button>
-                <Button onPress={() => handleCompleted(modalData.booking_id)} className="bg-slate-900 text-white px-12">
-                  Completed
-                </Button>
+
+
+                {
+                  modalData.status.toLowerCase() === "pending" && (
+                    <Button color="danger" variant="flat" onPress={() => handleCancel(modalData.booking_id)}>
+                      Cancel Booking
+                    </Button>
+                  )
+                }
+
+                {modalData.status.toLowerCase() === "settlement" && (
+                  <>
+                    <Button onPress={() => handleCompleted(modalData.booking_id)} className="bg-slate-900 text-white px-12">
+                      Completed
+                    </Button>
+                  </>
+                )}
+
               </ModalFooter>
             </>
           )}

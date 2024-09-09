@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import { FooterPage } from "./FooterPage";
 
 export default function BarbershopProfilePage() {
     const { id } = useParams();
@@ -27,7 +28,6 @@ export default function BarbershopProfilePage() {
         try {
             const res = await request(`/reviews/${id}`);
             setReviews(res.data);
-            console.log(res)
         } catch (error) {
             console.log(error);
         }
@@ -47,6 +47,8 @@ export default function BarbershopProfilePage() {
                 <BarbershopOverview data={data}/>
                 <ReviewsRating data={reviews}/>
             </main>
+
+            <FooterPage />
         </>
 
     )

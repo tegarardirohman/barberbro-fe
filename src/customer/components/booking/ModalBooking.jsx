@@ -106,6 +106,7 @@ export default function ModalBooking({ data }) {
   };
 
   const handleSubmit = () => {
+
     if (!selectedDate || !selectedTime || !selectedService || !data) {
       setError("Please select a date, time, and service.");
       return;
@@ -187,6 +188,8 @@ export default function ModalBooking({ data }) {
               <>
                 <p>Please select service</p>
 
+                {error && <p className="text-red-500">{error}</p>}
+
                 <div className="flex flex-wrap gap-4 w-full py-4">
                   {data.services?.map((service) => (
                     <label
@@ -224,12 +227,13 @@ export default function ModalBooking({ data }) {
                 </div>
 
                 <DatePicker
+                  defaultValue={today(getLocalTimeZone())}
                   onChange={handleDateChange}
                   minValue={today(getLocalTimeZone())}
                   size="lg"
                   label="Booking Date"
                   labelPlacement="outside"
-                  description="Select booking date"
+                  description="Date format (MM-DD-YYYY)"
                   isRequired
                   className="py-3"
                 />
@@ -252,7 +256,7 @@ export default function ModalBooking({ data }) {
             {profileComplete && (
               <Button
                 onPress={handleSubmit}
-                className="bg-slate-800 text-white"
+                className="bg-slate-800 text-white cursor-pointer"
                 disabled
               >
                 Submit
