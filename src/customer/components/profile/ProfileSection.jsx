@@ -6,8 +6,10 @@ import useDocumentTitle from "../../../hooks/useDocumentTitle";
 import { convertDateToLong } from "../../../utils/utils";
 import { useAuth } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
+import { FaAt } from "react-icons/fa";
+import ProfileItem from "../../../barber/components/profile/ProfileItem";
 
-export default function ProfileSection({ handleEdit }) {
+export default function ProfileSection({ title = "Edit your profile info", handleEdit }) {
     useDocumentTitle('Barberbro - Profile')
 
     const { user } = useAuth();
@@ -97,8 +99,14 @@ export default function ProfileSection({ handleEdit }) {
                         <Button color="danger" size="sm" variant="light">Remove picture</Button>
                     </div>
                 </div> */}
+                <div className="w-full">
+                    <h2 className="text-xl font-bold mb-3">Account</h2>
+                    <ProfileItem icon={<FaAt size={24} className="text-zinc-600" />} name="Email" value={user?.email} />
+                </div>
+
+
                 <div>
-                    <p className="text-black text-lg font-bold mt-8 mb-8">Edit your profile info</p>
+                    <p className="text-black text-lg font-bold mt-8 mb-8"> {title} </p>
                 </div>
                 <div className="flex flex-col gap-y-4">
                     <div className="flex gap-4">
@@ -191,7 +199,7 @@ export default function ProfileSection({ handleEdit }) {
                             )}
                         />
                     </div>
-                    <Controller
+                    {/* <Controller
                         name="about"
                         control={control}
                         render={({ field }) => (
@@ -201,7 +209,7 @@ export default function ProfileSection({ handleEdit }) {
                                 placeholder="Edit your description here"
                             />
                         )}
-                    />
+                    /> */}
                 </div>
                 <Button type="submit" size="md" className="mt-8 mb-12 w-full bg-slate-800 text-slate-100">
                     Save changes

@@ -5,8 +5,9 @@ export const convertLongToDate = (date) => {
 }
 
 export const convertDateToLong = (date) => {
-    const newDate = new Date(date);
-    return newDate.setHours(0, 0, 0, 0);
+  const newDate = new Date(date);
+  newDate.setHours(0, 0, 0, 0);
+  return newDate.getTime();
 }
 
 export function addOneHour(timeString) {

@@ -20,7 +20,7 @@ import ProfileSection from "../profile/ProfileSection.jsx";
 
 export default function ModalBooking({ data }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDayName, setSelectedDayName] = useState(
     getDayName(new Date())
   );
@@ -31,6 +31,30 @@ export default function ModalBooking({ data }) {
 
   const { response, error: axiosError, loading, request } = useAxios();
   const { user, userDetail, refreshUserDetail } = useAuth();
+
+
+  const [availableBookingTime, setAvailableBookingTime] = useState([]);
+
+
+  const fetchAvailableBookingTime = async () => {
+    try {
+      const res = await request(`/bookings/${data.id}/${convertDateToLong(selectedDate)}`);
+      setAvailableBookingTime(res.data);
+      console.log(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+    if (data.id) {
+      fetchAvailableBookingTime();
+    }
+
+  }, [selectedDate, data]);
+
+
 
   const [requestData, setRequestData] = useState({
     barber_id: "",
@@ -156,6 +180,7 @@ export default function ModalBooking({ data }) {
           <ModalBody>
             {!profileComplete ? (
               <ProfileSection
+                title="Complete your profile"
                 handleEdit={(status) => setProfileComplete(status)}
               />
             ) : (
@@ -210,6 +235,7 @@ export default function ModalBooking({ data }) {
                 />
 
                 <TimeSlider
+                  availableBookingTime={availableBookingTime}
                   operatingHours={data.operational_hours}
                   day={selectedDayName}
                   selectedDate={selectedDate}

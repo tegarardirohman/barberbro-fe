@@ -26,7 +26,7 @@ const SideBarCustomer = () => {
                                 Profile
                             </Button>
                         </NavbarItem>
-                        <NavbarItem className="w-full px-0">
+                        {/* <NavbarItem className="w-full px-0">
                             <Button as={Link} to="/customer/account/" aria-current="page"
                                     className="w-full text-start justify-start font-semibold" variant="light">
                                 <IoSettingsOutline size={22} className="mr-2"/>
@@ -39,7 +39,7 @@ const SideBarCustomer = () => {
                                 <IoNotificationsOutline size={22} className="mr-2"/>
                                 Notifications
                             </Button>
-                        </NavbarItem>
+                        </NavbarItem> */}
                         <NavbarItem className="w-full px-0">
                             <Button onClick={logout} aria-current="page"
                                     className="w-full text-start justify-start font-semibold text-red-600"
