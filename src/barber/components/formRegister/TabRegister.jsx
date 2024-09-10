@@ -130,6 +130,7 @@ export default function MultiStepForm() {
 
   useEffect(() => {
     setValue("operational_hours", operationalHours);
+
   }, [operationalHours]);
 
   const [step, setStep] = useState(1);
@@ -140,6 +141,13 @@ export default function MultiStepForm() {
     if (result) {
       setStep((prevStep) => prevStep + 1);
     } else {
+      
+      if (errors?.operational_hours) {
+        toast.error("Operational hour open time must be before closing time + 1 hour");
+      } else {
+        toast.error("Validation failed, please fill in all required fields");
+      }
+
       console.log("validation failed", errors);
     }
   };
@@ -188,6 +196,7 @@ export default function MultiStepForm() {
   };
 
   useEffect(() => {
+
     if (address) {
       console.log(address);
       const addressToSet =

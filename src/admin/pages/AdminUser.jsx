@@ -131,7 +131,7 @@ const AdminUser = () => {
           INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
           onView={handleView}
           // onEdit={handleEdit}
-          onDelete={handleDelete}
+          // onDelete={handleDelete}
           // onAdd={handleAdd}
         />
 

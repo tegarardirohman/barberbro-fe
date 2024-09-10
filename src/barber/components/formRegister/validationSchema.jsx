@@ -3,10 +3,10 @@ import { z } from 'zod';
 const validationSchema = z.object({
   barbershop: z.object({
     name: z.string().min(1, "Barbershop name is required"),
-    contact_number: z.string().min(1, "Contact number is required"),
+    contact_number: z.string().min(7, "Contact number is required").max(15, "Contact number is too long"),
     email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirm_password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirm_password: z.string().min(8, "Password must be at least 8 characters"),
     street_address: z.string().min(1, "Street address is required"),
     city: z.string().min(1, "City is required"),
     state_province_region: z.string().min(1, "State/Province/Region is required"),
@@ -28,6 +28,7 @@ const validationSchema = z.object({
       day: z.string().min(1, "Day is required"),
       opening_time: z.string().min(1, "Opening time is required"),
       closing_time: z.string().min(1, "Closing time is required"),
+      limit_per_session: z.number().min(1, "Limit per session is required"),
     }).refine((data) => {
       const [openingHour] = data.opening_time.split(':').map(Number);
       const [closingHour] = data.closing_time.split(':').map(Number);

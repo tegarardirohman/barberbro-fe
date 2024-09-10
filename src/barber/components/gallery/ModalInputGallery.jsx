@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -18,6 +18,22 @@ export default function ModalInputGallery({ onRefresh }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const { request } = useAxios();
   const [loading, setLoading] = useState(false);
+
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  useEffect(() => {
+    let toastId;
+    if (uploadLoading) {
+      toastId = toast.loading("Uploading...");
+    } else {
+      toast.dismiss(toastId);
+    }
+
+    return () => {
+      if (toastId) toast.dismiss(toastId);
+    };
+
+  }, [uploadLoading]);
 
   const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
@@ -44,6 +60,9 @@ export default function ModalInputGallery({ onRefresh }) {
   };
 
   const onUpload = async () => {
+
+    setUploadLoading(true);
+
     const formData = new FormData();
 
     selectedImages.forEach((image) => {
@@ -70,6 +89,8 @@ export default function ModalInputGallery({ onRefresh }) {
       setSelectedImages([]);
     } catch (error) {
       toast.error("Error uploading images", error);
+    } finally {
+      setUploadLoading(false);
     }
   };
 

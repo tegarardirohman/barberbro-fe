@@ -183,7 +183,7 @@ const StaffProfile = () => {
           <Card className='w-full p-8 flex flex-row gap-8 border-1' shadow='none'>
             <div>
               <div className='w-32 aspect-square rounded-full hover:backdrop-blur cursor-pointer hover:shadow-lg transition-shadow duration-300 bg-slate-100' onClick={() => document.getElementById('imageInput').click()}>
-                <img src={getImageUrl(userDetail?.barbershop_profile_picture_id?.path)} alt="test" className='w-full aspect-square rounded-full' />
+                <img src={getImageUrl(userDetail?.barbershop_profile_picture_id?.path)} alt="test" className='w-full aspect-square object-cover rounded-full' />
               </div>
             </div>
 

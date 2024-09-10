@@ -18,11 +18,17 @@ const OperationalHoursInput = ({ operationalHours, setOperationalHours }) => {
 
   const handleTimeChange = (day, type, value) => {
     setOperationalHours((prev) =>
-      prev.map((hour) =>
-        hour.day === day ? { ...hour, [type]: value } : hour
-      )
+      prev.map((hour) => {
+        if (hour.day === day) {
+          // Jika type adalah 'limit_per_session', konversi value menjadi integer
+          const newValue = type === 'limit_per_session' ? parseInt(value, 10) : value;
+          return { ...hour, [type]: newValue };
+        }
+        return hour;
+      })
     );
   };
+  
 
   const isChecked = (day) => operationalHours.some((hour) => hour.day === day);
 

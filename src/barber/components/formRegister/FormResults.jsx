@@ -86,6 +86,7 @@ export default function FormResults({ data }) {
                     <TableColumn>DAY</TableColumn>
                     <TableColumn>OPEN</TableColumn>
                     <TableColumn>CLOSED</TableColumn>
+                    <TableColumn>LIMIT SESSION</TableColumn>
                 </TableHeader>
                 <TableBody>
 
@@ -94,6 +95,7 @@ export default function FormResults({ data }) {
                             <TableCell>{item.day}</TableCell>
                             <TableCell>{item.opening_time}</TableCell>
                             <TableCell>{item.closing_time}</TableCell>
+                            <TableCell>{item.limit_per_session}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

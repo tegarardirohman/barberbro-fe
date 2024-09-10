@@ -124,24 +124,25 @@ export default function NearbyBarber({ limit = 0 }) {
           limit <= 0 && 
           (
             <ReactPaginate
-            previousLabel={ <FaArrowLeft className="text-2xl" /> }
-            nextLabel={ <FaArrowRight className="text-2xl" /> }
-            breakLabel={"..."}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={3}
-            onPageChange={handlePageClick}
-            containerClassName={"pagination flex justify-center items-center py-4 gap-10 mt-8 border-y-1 mb-4"}
-            activeClassName={"active bg-slate-800 text-slate-50"}
-            pageClassName={"page-item w-14 text-center py-3 text-slate-900 rounded-lg bg-slate-50 border-1 text-slate-100 hover:opacity-80 cursor-pointer"}
-            pageLinkClassName={"page-link"}
-            previousClassName={"page-item px-4 py-3 hover:opacity-80 cursor-pointer rounded-lg bg-slate-800 border-1 text-slate-100"}
-            previousLinkClassName={"page-link"}
-            nextClassName={"page-item px-4 py-3 rounded-lg bg-slate-800 text-slate-100 hover:opacity-80 cursor-pointer"}
-            nextLinkClassName={"page-link"}
-            breakClassName={"page-item"}
-            breakLinkClassName={"page-link"}
-          />
+              previousLabel={ <FaArrowLeft className="text-2xl" /> }
+              nextLabel={ <FaArrowRight className="text-2xl" /> }
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination flex justify-center items-center py-4 gap-10 mt-8 border-y-1 mb-4"}
+              activeClassName={"active bg-slate-800 text-white"}
+              pageClassName={"page-item w-14 text-center py-3 text-slate-900 rounded-lg bg-slate-50 border-1 text-slate-100 hover:opacity-80 cursor-pointer"}
+              pageLinkClassName={"page-link text-red block w-full h-full py-0"}
+              previousClassName={"page-item px-4 py-3 hover:opacity-80 cursor-pointer rounded-lg bg-slate-800 border-1 text-slate-100"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item px-4 py-3 rounded-lg bg-slate-800 text-slate-100 hover:opacity-80 cursor-pointer"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+            />
+
             
           )
         }

@@ -6,6 +6,7 @@ import ServiceChart from '../components/dashboard/ServiceChart';
 import { Rating } from 'react-simple-star-rating';
 import useAxios from '../../hooks/useAxios';
 import { format, getMonth, getYear } from 'date-fns';
+import { useAuth } from '../../context/AuthContext';
 
 // Fungsi untuk mendapatkan nama bulan
 const getMonthName = (monthIndex) => {
@@ -70,6 +71,19 @@ const processBookingData = (bookings) => {
 const StaffDashboard = () => {
   const { request } = useAxios();
   const [transaction, setTransaction] = useState([]);
+  const {userDetail, refreshUserDetail} = useAuth();
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+
+    if (userDetail) {
+      setRating(userDetail.average_rating);
+    } else {
+      refreshUserDetail();
+    }
+
+  }, [userDetail]); 
+
 
   const [statitic1, setStatistic1] = useState({});
   const [statitic2, setStatistic2] = useState([]);
@@ -111,7 +125,7 @@ const StaffDashboard = () => {
           </Card>
           <Card className='w-full p-4'>
             <h2 className='text-xl font-bold mb-4'>Barber Rating</h2>
-            <Rating initialValue={3.5} size={32} readonly tooltipArray={[1, 2, 3, 4, 5]} />
+            <Rating initialValue={rating} size={32} readonly tooltipArray={[1, 2, 3, 4, 5]} />
           </Card>
         </div>
       </div>

@@ -37,7 +37,7 @@ const StaffFullTransaction = () => {
       const statusColorMap = {
         Pending: "warning", 
         Settlement: "primary",
-        Canceled: "danger",
+        Canceled: "danger", 
         Completed: "success"
       };
 

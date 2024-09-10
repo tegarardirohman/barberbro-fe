@@ -66,6 +66,7 @@ export default function ImageInput({ imageUrl }) {
         style={{
           backgroundImage: imagePreview ? `url(${imagePreview})` : (imageUrl? `url(${imageUrl})` : 'none'),
           backgroundSize: 'cover',
+          backgroundFit: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
         }}
