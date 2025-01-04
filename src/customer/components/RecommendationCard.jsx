@@ -1,42 +1,51 @@
-import React, { useState, useEffect } from "react";
-import useAxios from "../../hooks/useAxios";
+import { useState, useEffect } from "react";
 import { checkBarbershopStatus, getImageUrl } from "../../utils/utils";
 import { Rating } from "react-simple-star-rating";
 import { useNavigate } from "react-router-dom";
 import { RiMapPinLine } from "react-icons/ri";
 import ReactPaginate from "react-paginate";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import {barbershops} from "../../placeholder/barbershop.js";
 
 export default function RecommendationCard({ limit = 0 }) {
   const [datas, setDatas] = useState([]);
-  const { response, error, loading, request } = useAxios();
+  //const { request } = useAxios();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0); 
   const itemsPerPage = 8; 
   const [pageCount, setPageCount] = useState(0); 
 
-  const fetchDatas = async () => {
-    try {
-      const result = await request(`/barbers`);
-
-      if (limit > 0) {
-        setDatas(result.data.slice(0, limit));
-      } else {
-        setDatas(result.data);
-        setPageCount(Math.ceil(result.data.length / itemsPerPage));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchDatas = async () => {
+  //   try {
+  //     const result = await request(`/barbers`);
+  //
+  //     if (limit > 0) {
+  //       setDatas(result.data.slice(0, limit));
+  //     } else {
+  //       setDatas(result.data);
+  //       setPageCount(Math.ceil(result.data.length / itemsPerPage));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  //
+  // useEffect(() => {
+  //   fetchDatas();
+  // }, []);
 
   useEffect(() => {
-    fetchDatas();
-  }, []);
+    if (limit > 0) {
+      setDatas(barbershops.slice(0, limit));
+    } else {
+      setDatas(barbershops);
+      setPageCount(Math.ceil(barbershops.length / itemsPerPage));
+    }
+  }, [limit]);
 
   // Fungsi untuk menangani perubahan halaman
   const handlePageClick = (event) => {
-    const newOffset = event.selected * itemsPerPage;
+    //const newOffset = event.selected * itemsPerPage;
     setCurrentPage(event.selected);
   };
 
@@ -74,7 +83,8 @@ export default function RecommendationCard({ limit = 0 }) {
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                 <img
                   alt={data.barbershop_profile_picture_id.name}
-                  src={getImageUrl(data.barbershop_profile_picture_id.path)}
+                  //src={getImageUrl(data.barbershop_profile_picture_id.path)}
+                    src={data.barbershop_profile_picture_id.path}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                 />
               </div>

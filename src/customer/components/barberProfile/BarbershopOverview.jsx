@@ -1,38 +1,34 @@
-import { useEffect, useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { Radio, RadioGroup } from "@headlessui/react";
+import {useEffect, useState} from "react";
 import ModalBooking from "../booking/ModalBooking.jsx";
-import { Rating } from "react-simple-star-rating";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Carousel from "./Carousel.jsx";
 import useAxios from "../../../hooks/useAxios.jsx";
 import GoogleMapsEmbed from "../googleMap/GoogleMapsEmbed.jsx";
-import GoogleMapsLink from "../googleMap/GoogleMapsLink.jsx";
-import { Card } from "@nextui-org/react";
+import {Card} from "@nextui-org/react";
 import ProfileItem from "../../../barber/components/profile/ProfileItem.jsx";
-import { PiAt, PiCityDuotone, PiPhoneDuotone } from "react-icons/pi";
-import { FaInstagram } from "react-icons/fa6";
-import { IoLogoTiktok } from "react-icons/io5";
-import { MdFacebook } from "react-icons/md";
+import {PiAt, PiCityDuotone, PiPhoneDuotone} from "react-icons/pi";
+import {FaInstagram} from "react-icons/fa6";
+import {IoLogoTiktok} from "react-icons/io5";
+import {MdFacebook} from "react-icons/md";
+import {barbershops} from "../../../placeholder/barbershop.js";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
+// function classNames(...classes) {
+//   return classes.filter(Boolean).join(" ");
+// }
+const fakeData = barbershops[15];
 export default function BarbershopOverview({ data }) {
   // const [selectedColor, setSelectedColor] = useState(product.colors[0])
-  const [selectedSize, setSelectedSize] = useState(2);
+  //const [selectedSize, setSelectedSize] = useState(2);
   const [images, setImages] = useState([]);
-
-  const { response, error, loading, request } = useAxios();
+  const { request } = useAxios();
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (data.id) {
+    if (fakeData.id) {
       const fetchImages = async () => {
         try {
-          const result = await request(`/barbers/${data.id}/gallery-images`);
+          const result = await request(`/barbers/${fakeData.id}/gallery-images`);
           setImages(result.data);
           console.log(result.data);
         } catch (error) {
@@ -98,7 +94,8 @@ export default function BarbershopOverview({ data }) {
                 aria-current="page"
                 className="font-medium text-gray-500 hover:text-gray-600"
               >
-                {data.name}
+                {/*{data.name}*/}
+                {fakeData.name}
               </Link>
             </li>
           </ol>
@@ -144,7 +141,8 @@ export default function BarbershopOverview({ data }) {
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              {data.name}
+              {/*{data.name}*/}
+              {fakeData.name}
             </h1>
           </div>
 
@@ -154,19 +152,21 @@ export default function BarbershopOverview({ data }) {
 
             <div className="flex w-full">
             <p className="text-md tracking-tight text-gray-900 mb-4">
-              {data.street_address}
+              {/*{data.street_address}*/}
+              {fakeData.street_address}
             </p>
 
 
             </div>
 
-            <GoogleMapsEmbed latitude={data.latitude} longitude={data.longitude} />
+            {/*<GoogleMapsEmbed latitude={data.latitude} longitude={data.longitude} />*/}
+            <GoogleMapsEmbed latitude={fakeData.latitude} longitude={fakeData.longitude} />
 
             <div className="mt-10">
               <div className="w-full">
 
                 {
-                  data?.operational_hours?.map((hour, index) => (
+                  fakeData?.operational_hours?.map((hour, index) => (
                     <div className="w-full flex justify-between items-center gap-2 mb-2" key={index}>
 
                       <h3 className="text-sm font-light">
@@ -184,7 +184,7 @@ export default function BarbershopOverview({ data }) {
 
               </div>
 
-              
+
               <div>
                 <ModalBooking data={data} />
               </div>
@@ -198,10 +198,10 @@ export default function BarbershopOverview({ data }) {
               <h2 className="text-md font-medium text-gray-900">Services</h2>
 
               <div className="mt-4 flex w-full gap-2">
-                {data?.services?.map((service) => (
+                {fakeData?.services?.map((service) => (
                   <Card key={service.service_id} className="text-sm p-4 font-bold border-1" radius="sm" shadow="none">
                     {service.service_name}
-                  </Card> 
+                  </Card>
                 ))}
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function BarbershopOverview({ data }) {
             {/* Description and details */}
             <div>
               <div className="space-y-6">
-              <div className="text-base text-gray-900" dangerouslySetInnerHTML={{ __html: data?.description }} />
+              <div className="text-base text-gray-900" dangerouslySetInnerHTML={{ __html: fakeData?.description }} />
               </div>
             </div>
 
@@ -224,12 +224,12 @@ export default function BarbershopOverview({ data }) {
 
               <div className="w-full flex justify-between">
 
-                <ProfileItem icon={<PiPhoneDuotone size={24} className='text-slate-600' />} name="Phone" value={data?.contact_number} />
-                <ProfileItem icon={<PiAt size={24} className='text-slate-600' />} name="Email" value={data?.email} />
+                <ProfileItem icon={<PiPhoneDuotone size={24} className='text-slate-600' />} name="Phone" value={fakeData?.contact_number} />
+                <ProfileItem icon={<PiAt size={24} className='text-slate-600' />} name="Email" value={fakeData?.email} />
 
               </div>
 
-              <ProfileItem icon={<PiCityDuotone size={24} className='text-slate-600' />} name="City" value={data?.city} />
+              <ProfileItem icon={<PiCityDuotone size={24} className='text-slate-600' />} name="City" value={fakeData?.city} />
             </div>
 
 
@@ -242,9 +242,9 @@ export default function BarbershopOverview({ data }) {
               <div className="w-full flex justify-between">
 
               <div className="w-full flex flex-col justify-between mt-4 gap-4">
-                <ProfileItem icon={<FaInstagram size={24} className='text-orange-600' />} name="Instagram" value={<a href={data?.social_media?.[1]?.platform_url} target="_blank">{data?.social_media?.[1]?.platform_url}</a> || " - "} />
-                <ProfileItem icon={<IoLogoTiktok size={24} className='text-slate-900' />} name="Tiktok" value={<a href={data?.social_media?.[2]?.platform_url} target="_blank">{data?.social_media?.[2]?.platform_url}</a> || " - "} />
-                <ProfileItem icon={<MdFacebook size={24} className='text-blue-600' />} name="Facebook" value={<a href={data?.social_media?.[0]?.platform_url} target="_blank">{data?.social_media?.[0]?.platform_url}</a> || " - "} />
+                <ProfileItem icon={<FaInstagram size={24} className='text-orange-600' />} name="Instagram" value={<a href={fakeData?.social_media?.[1]?.platform_url} target="_blank">{fakeData?.social_media?.[1]?.platform_url}</a> || " - "} />
+                <ProfileItem icon={<IoLogoTiktok size={24} className='text-slate-900' />} name="Tiktok" value={<a href={fakeData?.social_media?.[2]?.platform_url} target="_blank">{fakeData?.social_media?.[2]?.platform_url}</a> || " - "} />
+                <ProfileItem icon={<MdFacebook size={24} className='text-blue-600' />} name="Facebook" value={<a href={fakeData?.social_media?.[0]?.platform_url} target="_blank">{fakeData?.social_media?.[0]?.platform_url}</a> || " - "} />
               </div>
 
               </div>

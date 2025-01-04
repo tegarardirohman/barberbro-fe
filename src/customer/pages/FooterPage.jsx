@@ -27,8 +27,8 @@ export const FooterPage = () => {
                 </div>
                 <div className="w-full sm:w-1/3 mb-6">
                     <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
-                    <p className="text-gray-400">Email: barber.bro@mail.com</p>
-                    <p className="text-gray-400">Phone: +62 85156906167</p>
+                    <a href="https://www.linkedin.com/in/reywptr" className="text-gray-400 block">Linkedin</a>
+                    <a href="https://www.github.com/reywijaya" className="text-gray-400">Github</a>
                 </div>
             </div>
             <div className="border-t border-gray-700 p-4 mt-8 text-center">

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
-import useAxios from "../../hooks/useAxios";
 import ExploreBarber from "../components/explore/ExploreBarber";
 import { FooterPage } from "./FooterPage";
 import HeroExplore from "../components/explore/HeroExplore";
 import NearbyBarber from "../components/NearbyBarber";
 import RecommendationCard from "../components/RecommendationCard";
+import {barbershops} from "../../placeholder/barbershop.js";
 
 const ExplorePage = () => {
   useDocumentTitle("Explore Barberbro In World");
@@ -16,20 +16,21 @@ const ExplorePage = () => {
   const [day, setDay] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  const { request } = useAxios();
+  //const { request } = useAxios();
 
-  const fetchData = async () => {
-    try {
-      const res = await request("/barbers");
-      setDatas(res.data);
-      setFilteredDatas(res.data); 
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await request("/barbers");
+  //     setDatas(res.data);
+  //     setFilteredDatas(res.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchData();
+    setDatas(barbershops);
+    setFilteredDatas(barbershops);
   }, []);
 
   useEffect(() => {

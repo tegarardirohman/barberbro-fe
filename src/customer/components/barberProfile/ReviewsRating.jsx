@@ -1,8 +1,5 @@
-import {StarIcon} from "@heroicons/react/20/solid/index.js";
-import { useEffect, useState } from "react";
-import { Rating } from "react-simple-star-rating";
-import { convertLongToDate } from "../../../utils/utils";
-import { Avatar } from "@nextui-org/react";
+import {Rating} from "react-simple-star-rating";
+import {Avatar} from "@nextui-org/react";
 
 const posts = [
     {
@@ -178,22 +175,19 @@ const posts = [
     },
 ]
 
-const reviews = {href: '#', average: 4, totalCount: 117}
+//const reviews = {href: '#', average: 4, totalCount: 117}
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+// function classNames(...classes) {
+//     return classes.filter(Boolean).join(' ')
+// }
 
-export default function ReviewsRating({ data }) {
-    const [reviews, setReviews] = useState([]);
+export default function ReviewsRating({data}) {
+    //const [reviews, setReviews] = useState([]);
 
-
-    useEffect(() => {
-        setReviews(data)
-        console.log("review", data)
-        window.scrollTo(0, 0)
-    }, [data]);
-
+    // useEffect(() => {
+    //     setReviews(data)
+    //     window.scrollTo(0, 0)
+    // }, [data]);
 
     return (
         <div className="bg-white py-5 sm:py-5">
@@ -206,27 +200,69 @@ export default function ReviewsRating({ data }) {
                 </div>
                 <div
                     className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                    
-                    {data.length <= 0 && <p className="text-2xl font-bold text-gray-900">No reviews yet</p>}
 
+                    {/*{data.length <= 0 && <p className="text-2xl font-bold text-gray-900">No reviews yet</p>}*/}
 
-                    
-                    {data.length > 0 && data.map((review) => (
-                        <article key={review.id} className="flex max-w-xl flex-col items-start justify-between">
+                    {/*{data.length > 0 && data.map((review) => (*/}
+                    {/*    <article key={review.id} className="flex max-w-xl flex-col items-start justify-between">*/}
+                    {/*        <div className="flex items-center gap-x-4 text-xs">*/}
+                    {/*            <time dateTime={review.createdAt} className="text-gray-500">*/}
+                    {/*                {convertLongToDate(review.createdAt)}*/}
+                    {/*            </time>*/}
+
+                    {/*            {*/}
+                    {/*                review?.services?.map((post, index) => (*/}
+                    {/*                    <a */}
+                    {/*                        key={index}*/}
+                    {/*                        className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"*/}
+                    {/*                    >*/}
+                    {/*                        {post}*/}
+                    {/*                    </a>*/}
+                    {/*                    */}
+                    {/*                ))*/}
+                    {/*            }*/}
+
+                    {/*        </div>*/}
+                    {/*        <div className="group relative">*/}
+                    {/*            <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">*/}
+                    {/*                <a className="flex items-center gap-2  text-sm">*/}
+                    {/*                <Avatar size="sm" name={review.customer_name} />*/}
+                    {/*                    <span className="absolute inset-0"/>*/}
+                    {/*                    {review.customer_name}*/}
+                    {/*                </a>*/}
+                    {/*            </h3>*/}
+                    {/*            <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{review.comment}</p>*/}
+                    {/*        </div>*/}
+                    {/*        /!* Reviews *!/*/}
+                    {/*        <div className="mt-6">*/}
+                    {/*            <h3 className="sr-only">Reviews</h3>*/}
+                    {/*            <div className="flex items-center">*/}
+                    {/*                <div className="flex items-center">*/}
+                    {/*                  <Rating initialValue={review.rating} size={20} readonly />*/}
+                    {/*                </div>*/}
+                    {/*                <p className="sr-only">{review.rating} out of 5 stars</p>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </article>*/}
+                    {/*))}*/}
+
+                    {posts.map((post) => (
+                        <article key={post.id} className="flex max-w-xl flex-col items-start justify-between">
                             <div className="flex items-center gap-x-4 text-xs">
-                                <time dateTime={review.createdAt} className="text-gray-500">
-                                    {convertLongToDate(review.createdAt)}
+                                <time dateTime={post.date} className="text-gray-500">
+                                    {/*{convertLongToDate(review.createdAt)}*/}
+                                    {post.date}
                                 </time>
 
                                 {
-                                    review?.services?.map((post, index) => (
-                                        <a 
+                                    post?.services?.map((post, index) => (
+                                        <a
                                             key={index}
                                             className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
                                         >
                                             {post}
                                         </a>
-                                        
+
                                     ))
                                 }
 
@@ -234,21 +270,22 @@ export default function ReviewsRating({ data }) {
                             <div className="group relative">
                                 <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                                     <a className="flex items-center gap-2  text-sm">
-                                    <Avatar size="sm" name={review.customer_name} />
+                                        <Avatar size="sm" name={post.author.name}/>
                                         <span className="absolute inset-0"/>
-                                        {review.customer_name}
+                                        {post.author.name}
                                     </a>
                                 </h3>
-                                <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{review.comment}</p>
+                                <p className="mt-5">{post.title}</p>
+                                <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{post.description}</p>
                             </div>
                             {/* Reviews */}
                             <div className="mt-6">
                                 <h3 className="sr-only">Reviews</h3>
                                 <div className="flex items-center">
                                     <div className="flex items-center">
-                                      <Rating initialValue={review.rating} size={20} readonly />
+                                        <Rating initialValue={post.rating} size={20} readonly/>
                                     </div>
-                                    <p className="sr-only">{review.rating} out of 5 stars</p>
+                                    <p className="sr-only">{post.rating} out of 5 stars</p>
                                 </div>
                             </div>
                         </article>
